@@ -8,14 +8,6 @@
 
 config_version=4
 
-<<<<<<< HEAD
-[application]
-
-config/name="Bloomed"
-run/main_scene="res://Maps/Gym.tscn"
-config/icon="res://Assets/Icon/icon.png"
-
-=======
 _global_script_classes=[ {
 "base": "KinematicBody",
 "class": "Player",
@@ -36,7 +28,6 @@ config/icon="res://Assets/Icon/icon.png"
 
 NetworkManager="*res://Network/NetworkManager.gd"
 
->>>>>>> ec29a91 (Add networking base)
 [global]
 
 todo=false
@@ -100,9 +91,6 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-<<<<<<< HEAD
-=======
 quality/driver/driver_name="GLES2"
->>>>>>> ec29a91 (Add networking base)
 threads/thread_model=2
 environment/default_environment="res://Assets/Icon/default_env.tres"

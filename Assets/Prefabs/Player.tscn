@@ -1,24 +1,16 @@
 [gd_scene load_steps=9 format=2]
 
-<<<<<<< HEAD
-[ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
-=======
 [ext_resource path="res://Scripts/Game/Player.gd" type="Script" id=1]
->>>>>>> ec29a91 (Add networking base)
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 1, 0.054902, 0.054902, 1 )
 
 [sub_resource type="CapsuleMesh" id=2]
 material = SubResource( 1 )
-<<<<<<< HEAD
-mid_height = 2.5
-=======
 radius = 0.5
 mid_height = 1.25
 radial_segments = 32
 rings = 4
->>>>>>> ec29a91 (Add networking base)
 
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 0, 0, 0, 1 )
@@ -28,12 +20,8 @@ material = SubResource( 3 )
 size = Vector3( 1.2, 0.5, 0.4 )
 
 [sub_resource type="CapsuleShape" id=5]
-<<<<<<< HEAD
-height = 2.5
-=======
 radius = 0.5
 height = 1.25
->>>>>>> ec29a91 (Add networking base)
 
 [sub_resource type="DynamicFontData" id=7]
 font_path = "res://Assets/Fonts/Inter.ttf"
@@ -53,32 +41,13 @@ camera_sensitivity = 0.15
 jump_impulse = 4.0
 
 [node name="Body" type="MeshInstance" parent="."]
-<<<<<<< HEAD
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.25, 0 )
-mesh = SubResource( 2 )
-material/0 = null
-=======
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.125, 0 )
 mesh = SubResource( 2 )
->>>>>>> ec29a91 (Add networking base)
 
 [node name="Glasses" type="MeshInstance" parent="Body"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, -1.25 )
 visible = false
 mesh = SubResource( 4 )
-<<<<<<< HEAD
-material/0 = null
-
-[node name="Collider" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.25, 0 )
-shape = SubResource( 5 )
-
-[node name="Head" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -6.60419e-05 )
-
-[node name="Camera" type="Camera" parent="Head"]
-current = true
-=======
 
 [node name="Collider" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.125, 0 )
@@ -88,8 +57,6 @@ shape = SubResource( 5 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.625, 0 )
 
 [node name="Camera" type="Camera" parent="Head"]
->>>>>>> ec29a91 (Add networking base)
-fov = 90.0
 near = 0.01
 
 [node name="BackUpAimPoint" type="Position3D" parent="Head/Camera"]

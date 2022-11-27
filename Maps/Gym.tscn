@@ -3,11 +3,7 @@
 [ext_resource path="res://Assets/Textures/Dev/green.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Textures/Dev/light.png" type="Texture" id=2]
 [ext_resource path="res://Assets/Textures/Dev/orange.png" type="Texture" id=3]
-<<<<<<< HEAD
-[ext_resource path="res://Assets/Prefabs/Player.tscn" type="PackedScene" id=4]
-=======
 [ext_resource path="res://Maps/Gym.gd" type="Script" id=4]
->>>>>>> ec29a91 (Add networking base)
 [ext_resource path="res://Assets/Prefabs/Gun.tscn" type="PackedScene" id=5]
 
 [sub_resource type="SpatialMaterial" id=1]
@@ -26,10 +22,7 @@ uv1_scale = Vector3( 0.5, 0.5, 0.5 )
 uv1_triplanar = true
 
 [node name="Gym" type="Spatial"]
-<<<<<<< HEAD
-=======
 script = ExtResource( 4 )
->>>>>>> ec29a91 (Add networking base)
 
 [node name="Floor" type="CSGBox" parent="."]
 transform = Transform( 0.9887, 0, 0, 0, 0.09887, 0, 0, 0, 0.9887, 0, -0.1, 0 )
@@ -52,15 +45,7 @@ use_collision = true
 polygon = PoolVector2Array( 0, 0, 0, 1, 2.5, 0, 2.5, 0, 2.5, 0, 2.5, 0 )
 material = SubResource( 3 )
 
-<<<<<<< HEAD
-[node name="Player" parent="." instance=ExtResource( 4 )]
-transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
-
-[node name="Gun" parent="." instance=ExtResource( 5 )]
-transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -1.19191, 0.171184, 0 )
-=======
 [node name="Gun" parent="." instance=ExtResource( 5 )]
 transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -1.19191, 0.171184, 0 )
 
 [node name="Players" type="Spatial" parent="."]
->>>>>>> ec29a91 (Add networking base)

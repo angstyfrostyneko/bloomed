@@ -1,10 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-<<<<<<< HEAD
-[ext_resource path="res://Scripts/Bullet.gd" type="Script" id=1]
-=======
 [ext_resource path="res://Scripts/Game/Bullet.gd" type="Script" id=1]
->>>>>>> ec29a91 (Add networking base)
 
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 0.05, 0.05, 0.05 )
@@ -27,7 +23,6 @@ shape = SubResource( 2 )
 
 [node name="Body" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
-material/0 = null
 
 [node name="Area" type="Area" parent="."]
 
