@@ -1,4 +1,5 @@
 extends KinematicBody
+class_name Playera
 
 
 const MIN_CAMERA_ANGLE = -90
@@ -34,10 +35,13 @@ var miscelanious = [0]
 var ammunition = [10, 150, 15, 100]
 
 func _ready():
+	rset_config('transform', 1)
 	modify_money(0)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _process(_delta):
+	if not is_network_master():
+		return
 	if Input.is_action_pressed("main_action"):
 		main_action()
 	if Input.is_action_pressed("second_action"):
@@ -52,12 +56,16 @@ func _process(_delta):
 var temp = get_children()
 var temp2 = 0
 func _physics_process(delta):
+	if not is_network_master():
+		return
 	var movement = _get_movement_direction()
 	
 	velocity.x = lerp(velocity.x,movement.x * speed,acceleration * delta)
 	velocity.z = lerp(velocity.z,movement.z * speed,acceleration * delta)
 	velocity.y += GRAVITY * delta
 	velocity = move_and_slide(velocity)
+	
+	rset_unreliable('transform', self.transform)
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
@@ -176,3 +184,6 @@ func drop(item):
 	
 	if item.get("type") == "gun":
 		ammunition[response[0]] = response[1]
+
+func set_main():
+	$Head/Camera.make_current()

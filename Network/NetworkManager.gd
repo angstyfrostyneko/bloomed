@@ -63,6 +63,7 @@ func start_hosting(accountInfo, port):
 func join_game(accountInfo, serverIp: String, port: int):
 	self.is_server = false
 	self.reset_network()
+	# warning-ignore:return_value_discarded
 	get_tree().connect('connected_to_server', self, 'on_connected_to_server')
 	
 	self.username = accountInfo[PLAYER_NAME_FIELD]

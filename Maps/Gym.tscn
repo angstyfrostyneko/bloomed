@@ -46,6 +46,6 @@ polygon = PoolVector2Array( 0, 0, 0, 1, 2.5, 0, 2.5, 0, 2.5, 0, 2.5, 0 )
 material = SubResource( 3 )
 
 [node name="Gun" parent="." instance=ExtResource( 5 )]
-transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -1.19191, 0.171184, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.192, 0.171, 0 )
 
 [node name="Players" type="Spatial" parent="."]

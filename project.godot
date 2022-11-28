@@ -10,12 +10,12 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "KinematicBody",
-"class": "Player",
+"class": "Playera",
 "language": "GDScript",
-"path": "res://Scripts/Game/Player.gd"
+"path": "res://Scripts/Player.gd"
 } ]
 _global_script_class_icons={
-"Player": ""
+"Playera": ""
 }
 
 [application]
@@ -31,6 +31,7 @@ NetworkManager="*res://Network/NetworkManager.gd"
 [global]
 
 todo=false
+VSYNC=true
 
 [input]
 

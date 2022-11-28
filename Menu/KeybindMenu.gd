@@ -22,6 +22,7 @@ func _ready():
 		
 		button.visible = true
 		button.text = key_name.as_text()
+		# warning-ignore:return_value_discarded
 		button.connect("button_down", self, "on_button_clicked", [label, button])
 		
 		Grid.add_child(label, true)

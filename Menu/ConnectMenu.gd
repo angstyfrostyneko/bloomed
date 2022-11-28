@@ -5,7 +5,9 @@ onready var KeybindMenu: PopupPanel  = $KeybindMenu
 var connecting = false
 
 func _ready():
+# warning-ignore:return_value_discarded
 	NetworkManager.connect('auth_finished', self, 'on_auth_finished')
+# warning-ignore:return_value_discarded
 	get_tree().connect('connection_failed', self, 'on_connection_failed')
 
 func _on_ConnectButton_pressed():
@@ -24,6 +26,7 @@ func _on_ConnectButton_pressed():
 	
 
 func on_auth_finished():
+# warning-ignore:return_value_discarded
 	get_tree().change_scene('res://Maps/Gym.tscn')
 
 func on_connection_failed():
