@@ -1,5 +1,5 @@
 extends KinematicBody
-class_name Playera
+class_name Player
 
 
 const MIN_CAMERA_ANGLE = -90
@@ -171,11 +171,11 @@ func pickup(item):
 func drop(item):
 	var response = item.dropped()
 
-	var source = item
+	var source := item as Spatial
 	source.get_parent().remove_child(item)
 	world.add_child(source)
 	source.set_owner(world)
-	print(world)
+	source.translation = self.translation
 	if gun1 == current_gun:
 		gun1 = null
 	else:
