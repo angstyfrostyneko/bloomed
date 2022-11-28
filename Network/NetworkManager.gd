@@ -17,6 +17,7 @@ const PLAYER_NAME_FIELD := 'name'
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	reset_network()
+# warning-ignore:return_value_discarded
 	get_tree().connect('server_disconnected', self, 'on_server_disconnected')
 
 func reset_network():
@@ -49,7 +50,9 @@ func start_hosting(accountInfo, port):
 	if result == OK:
 		get_tree().set_network_peer(peer)
 		
+		# warning-ignore:return_value_discarded
 		get_tree().connect('network_peer_connected', self, 'on_peer_connected')
+		# warning-ignore:return_value_discarded
 		get_tree().connect('network_peer_disconnected', self, 'on_peer_disconnected')
 		print('Server started.')
 		
@@ -81,6 +84,7 @@ func join_game(accountInfo, serverIp: String, port: int):
 func on_connected_to_server():
 	print('Connected to server, authenticating')
 	rpc_id(SERVER_ID, 'auth_request', get_tree().get_network_unique_id(), self.username)
+# warning-ignore:unused_variable
 	var auth_answer = yield(self, 'auth_response')
 
 signal player_connected(playerData)

@@ -6,8 +6,11 @@ var main_player: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+# warning-ignore:return_value_discarded
 	NetworkManager.connect('server_closed', self, 'on_server_closed')
+# warning-ignore:return_value_discarded
 	NetworkManager.connect('player_connected', self, 'spawn_player')
+# warning-ignore:return_value_discarded
 	NetworkManager.connect('player_disconnected', self, 'on_player_disconnected')
 	
 	self.setup()
@@ -41,6 +44,7 @@ func on_player_disconnected(id):
 	player_node.queue_free()
 
 func on_server_closed():
+# warning-ignore:return_value_discarded
 	get_tree().change_scene('res://Scenes/ConnectMenu.tscn')
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
