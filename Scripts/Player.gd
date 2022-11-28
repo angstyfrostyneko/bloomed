@@ -15,6 +15,7 @@ var velocity: Vector3 = Vector3.ZERO
 onready var HUD = $HUD
 onready var head: Spatial = $Head
 onready var floorcheck = $FloorCheck
+onready var world = get_node("/root/World")
 onready var aimcast := $Head/Camera/AimCast as RayCast
 
 var health = 100
@@ -170,11 +171,11 @@ func pickup(item):
 func drop(item):
 	var response = item.dropped()
 
-	var target = get_tree().root.get_child(0)
 	var source = item
 	source.get_parent().remove_child(item)
-	target.add_child(source)
-	source.set_owner(target)
+	world.add_child(source)
+	source.set_owner(world)
+	print(world)
 	if gun1 == current_gun:
 		gun1 = null
 	else:
