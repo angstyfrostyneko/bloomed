@@ -40,6 +40,8 @@ func reload():
 		reloading = true
 		reload_timer.start()
 		yield(reload_timer, "timeout")
+		if reloading == false:
+			return
 		ammo_magazine += ammo_requested
 		ammo_reserve -= ammo_requested
 		_update_ammo_counter(ammo_magazine, ammo_reserve)
@@ -73,5 +75,7 @@ func picked_up(ammo):
 	_update_ammo_counter(ammo_magazine, ammo_reserve)
 
 func dropped():
+	# stops gun from reloading when dropped
+	reloading = false
 	# first int is so signal the class
 	return [3, ammo_reserve]
