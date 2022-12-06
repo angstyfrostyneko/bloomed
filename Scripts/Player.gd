@@ -140,10 +140,7 @@ func pickup(item):
 	if item.has_method("picked_up"):
 		var target := get_node("Head/Camera/GunPosition") as Spatial
 		var source := item as Spatial
-		if not NetworkManager.is_host():
-			rpc_id(1, "server_pickup", target.get_path(), source.get_path())
-		else:
-			rpc("server_pickup", target.get_path(), source.get_path())
+		rpc("remote_pickup", target.get_path(), source.get_path())
 		source.get_parent().remove_child(item)
 		target.add_child(source)
 		source.set_owner(target)
@@ -171,7 +168,7 @@ func pickup(item):
 			"bandage":
 				pass
 
-remote func server_pickup(target_path, source_path):
+remote func remote_pickup(target_path, source_path):
 	var target = get_node(target_path)
 	var source = get_node(source_path)
 	source.get_parent().remove_child(source)
