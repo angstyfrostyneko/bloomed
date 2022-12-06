@@ -149,3 +149,6 @@ remote func answer_auth(accepted, answer):
 	
 remote func finish_auth():
 	emit_signal('auth_finished')
+
+func is_host():
+  return self.is_server

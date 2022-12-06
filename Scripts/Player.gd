@@ -15,7 +15,8 @@ var velocity: Vector3 = Vector3.ZERO
 onready var HUD = $HUD
 onready var head: Spatial = $Head
 onready var floorcheck = $FloorCheck
-onready var world = get_node("/root/World")
+onready var world := get_node("/root/World") as Spatial
+onready var player := get_node(".") as Player
 onready var aimcast := $Head/Camera/AimCast as RayCast
 
 var health = 100
@@ -54,8 +55,6 @@ func _process(_delta):
 	if Input.is_action_just_pressed("third_interaction"):
 		third_interaction()
 
-var temp = get_children()
-var temp2 = 0
 func _physics_process(delta):
 	if not is_network_master():
 		return
@@ -141,6 +140,10 @@ func pickup(item):
 	if item.has_method("picked_up"):
 		var target := get_node("Head/Camera/GunPosition") as Spatial
 		var source := item as Spatial
+		if not NetworkManager.is_host():
+			rpc_id(1, "server_pickup", target.get_path(), source.get_path())
+		else:
+			rpc("server_pickup", target.get_path(), source.get_path())
 		source.get_parent().remove_child(item)
 		target.add_child(source)
 		source.set_owner(target)
@@ -168,9 +171,18 @@ func pickup(item):
 			"bandage":
 				pass
 
+remote func server_pickup(target_path, source_path):
+	var target = get_node(target_path)
+	var source = get_node(source_path)
+	source.get_parent().remove_child(source)
+	target.add_child(source)
+	source.set_owner(target)
+	source.translation = Vector3(0, 0, 0)
+	source.rotation = Vector3(0, 0, 0)
+
 func drop(item):
 	var response = item.dropped()
-
+	
 	var source := item as Spatial
 	source.get_parent().remove_child(item)
 	world.add_child(source)
