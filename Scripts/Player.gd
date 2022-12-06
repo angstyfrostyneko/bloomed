@@ -68,6 +68,8 @@ func _physics_process(delta):
 	rset_unreliable('transform', self.transform)
 
 func _unhandled_input(event):
+	if not is_network_master():
+		return
 	if event is InputEventMouseMotion:
 		_handle_camera_rotation(event)
 
