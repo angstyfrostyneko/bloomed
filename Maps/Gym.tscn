@@ -19,8 +19,9 @@ uv1_triplanar = true
 script = ExtResource( 4 )
 
 [node name="Floor" type="CSGBox" parent="."]
-transform = Transform( 0.9887, 0, 0, 0, 0.09887, 0, 0, 0, 0.9887, 0, -0.1, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 use_collision = true
+collision_layer = 3
 width = 240.473
 depth = 232.321
 material = SubResource( 1 )
@@ -28,6 +29,7 @@ material = SubResource( 1 )
 [node name="Buildings" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.51191, 8.02857, 3.46938 )
 use_collision = true
+collision_layer = 3
 width = 6.0
 height = 16.0
 depth = 6.0
@@ -35,6 +37,7 @@ material = SubResource( 2 )
 
 [node name="Box" type="CSGBox" parent="Buildings"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 9.53674e-07, -0.5 )
+layers = 3
 use_collision = true
 width = 6.0
 height = 16.0
@@ -43,6 +46,7 @@ material = SubResource( 2 )
 
 [node name="Box2" type="CSGBox" parent="Buildings"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 19, -0.5 )
+layers = 3
 use_collision = true
 width = 6.0
 height = 54.0
@@ -51,6 +55,7 @@ material = SubResource( 2 )
 
 [node name="Box4" type="CSGBox" parent="Buildings"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2.86102e-06, -17 )
+layers = 3
 use_collision = true
 width = 6.0
 height = 16.0
@@ -59,6 +64,7 @@ material = SubResource( 2 )
 
 [node name="Box5" type="CSGBox" parent="Buildings"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 2.86102e-06, -17 )
+layers = 3
 use_collision = true
 width = 6.0
 height = 16.0
@@ -67,6 +73,7 @@ material = SubResource( 2 )
 
 [node name="Ramp" type="CSGBox" parent="Buildings"]
 transform = Transform( 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, -19, -5, -17 )
+layers = 3
 use_collision = true
 width = 6.0
 height = 16.0
@@ -75,6 +82,7 @@ material = SubResource( 2 )
 
 [node name="Box3" type="CSGBox" parent="Buildings"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47482, -0.0442781, -17.536 )
+layers = 3
 use_collision = true
 width = 6.0
 height = 16.0

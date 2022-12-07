@@ -36,6 +36,11 @@ var current_gun = null
 var miscelanious = [0]
 var ammunition = [10, 150, 15, 100]
 
+const THROW_STRENGTH := 35
+const MAX_THROW_CHARGE:= 1.0
+var throw_charging := false
+var throw_charge_length := 0.0
+
 func _ready():
 	rset_config('transform', 1)
 	modify_money(0)
@@ -52,8 +57,15 @@ func _process(_delta):
 		main_interaction()
 	if Input.is_action_just_pressed("second_interaction"):
 		second_interaction()
+
 	if Input.is_action_just_pressed("third_interaction"):
+		throw_charging = true
+	elif throw_charging:
+		throw_charge_length = min(MAX_THROW_CHARGE, throw_charge_length + _delta)
+	if Input.is_action_just_released("third_interaction"):
+		throw_charging = false
 		third_interaction()
+		throw_charge_length = 0
 
 func _physics_process(delta):
 	if not is_network_master():
@@ -94,7 +106,9 @@ func second_action():
 
 func main_interaction():
 	if current_gun == null and aimcast.get_collider() != null:
-		pickup(aimcast.get_collider().get_parent())
+		var item = aimcast.get_collider().get_parent()
+		if item is Item:
+			pickup(item)
 
 func second_interaction():
 	if current_gun == null:
@@ -138,16 +152,10 @@ func damage(amount):
 		# TODO: don't actually kill, fake it
 		queue_free()
 
-func pickup(item):
+func pickup(item: Item):
 	if item.has_method("picked_up"):
 		var target := get_node("Head/Camera/GunPosition") as Spatial
-		var source := item as Spatial
-		rpc("remote_pickup", target.get_path(), source.get_path())
-		source.get_parent().remove_child(item)
-		target.add_child(source)
-		source.set_owner(target)
-		source.translation = Vector3(0, 0, 0)
-		source.rotation = Vector3(0, 0, 0)
+		rpc("remote_pickup", target.get_path(), item.get_path())
 		current_gun = item
 		if gun1 == null:
 			gun1 = item
@@ -169,24 +177,24 @@ func pickup(item):
 				item.picked_up(reserve_ammo)
 			"bandage":
 				pass
+		item.is_held = true
 
-remote func remote_pickup(target_path, source_path):
+remotesync func remote_pickup(target_path, item_path):
 	var target = get_node(target_path)
-	var source = get_node(source_path)
-	source.get_parent().remove_child(source)
-	target.add_child(source)
-	source.set_owner(target)
-	source.translation = Vector3(0, 0, 0)
-	source.rotation = Vector3(0, 0, 0)
-
-func drop(item):
-	var response = item.dropped()
+	var item = get_node(item_path)
+	item.get_parent().remove_child(item)
+	target.add_child(item)
+	item.set_owner(target)
+	item.translation = Vector3(0, 0, 0)
+	item.rotation = Vector3(0, 0, 0)
 	
-	var source := item as Spatial
-	source.get_parent().remove_child(item)
-	world.add_child(source)
-	source.set_owner(world)
-	source.translation = self.translation
+	item.on_pickup()
+	
+
+func drop(item: Item):
+	var response = item.dropped()
+	rpc("remote_drop", item.get_path(), self.throw_charge_length)
+	
 	if gun1 == current_gun:
 		gun1 = null
 	else:
@@ -196,6 +204,20 @@ func drop(item):
 	
 	if item.get("type") == "gun":
 		ammunition[response[0]] = response[1]
+
+remotesync func remote_drop(item_path, strength: float):
+	var item = get_node(item_path) as Item
+	item.dropped()
+	item.get_parent().remove_child(item)
+	world.add_child(item)
+	item.set_owner(world)
+	
+	item.translation = self.head.global_translation + Vector3(0,-0.125,0)
+	
+	item.on_drop()
+	print(strength)
+	item.apply_central_impulse(-(5 + THROW_STRENGTH * strength) * head.global_transform.basis.z)
+	
 
 func set_main():
 	$Head/Camera.make_current()

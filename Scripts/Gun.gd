@@ -1,4 +1,4 @@
-extends Spatial
+extends Item
 
 var type = "gun"
 var weapon_class = "rifle"
