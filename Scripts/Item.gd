@@ -11,7 +11,7 @@ func _ready():
 	rset_config('transform', 1)
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if not self.is_network_master():
 		return
 	if not is_held:

@@ -5,6 +5,8 @@ class_name Player
 const MIN_CAMERA_ANGLE = -90
 const MAX_CAMERA_ANGLE = 90
 const GRAVITY = -9.8
+const THROW_STRENGTH := 35
+const MAX_THROW_CHARGE := 1.0
 
 export var camera_sensitivity: float = 0.05
 export var speed: float = 10.0
@@ -28,16 +30,12 @@ var money = 250
 # 3 auxilary slot for misc items (bandages)
 # 4 ammo slots for the classes (sniper, pistol, shotgun, rifle)
 
-#var hands = [null, null]
-#var weapons = [null, null]
-var gun1
-var gun2
-var current_gun = null
-var miscelanious = [0]
+# ^^ NEEDS HEAVY RETHINKING, IGNORE FOR NOW ^^
+# 4 slots, any of them could hold anything
+var inventory = [null, null, null, null]
+var current_slot = 0
 var ammunition = [10, 150, 15, 100]
 
-const THROW_STRENGTH := 35
-const MAX_THROW_CHARGE:= 1.0
 var throw_charging := false
 var throw_charge_length := 0.0
 
@@ -46,25 +44,39 @@ func _ready():
 	modify_money(0)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _process(_delta):
+func _process(delta):
 	if not is_network_master():
 		return
-	if Input.is_action_pressed("main_action"):
-		main_action()
-	if Input.is_action_pressed("second_action"):
-		second_action()
-	if Input.is_action_just_pressed("main_interaction"):
-		main_interaction()
-	if Input.is_action_just_pressed("second_interaction"):
-		second_interaction()
+		
+	var held_item = inventory[current_slot]
+	if Input.is_action_pressed("shoot"):
+		if held_item == null:
+			return
+		if held_item.type == "gun":
+			held_item.shoot()
 
-	if Input.is_action_just_pressed("third_interaction"):
+	if Input.is_action_just_pressed("pickup"):
+		if held_item != null:
+			return
+		var collider = aimcast.get_collider()
+		if collider != null and collider.get_parent() is Item:
+			pickup(collider.get_parent())
+
+	if Input.is_action_just_pressed("reload"):
+		if held_item == null:
+			return
+		if held_item.type == "gun":
+			held_item.reload()
+
+	if Input.is_action_just_pressed("drop"):
 		throw_charging = true
 	elif throw_charging:
-		throw_charge_length = min(MAX_THROW_CHARGE, throw_charge_length + _delta)
-	if Input.is_action_just_released("third_interaction"):
+		throw_charge_length = min(MAX_THROW_CHARGE, throw_charge_length + delta)
+
+	if Input.is_action_just_released("drop"):
 		throw_charging = false
-		third_interaction()
+		if held_item != null and held_item.has_method("dropped"):
+			drop(held_item)
 		throw_charge_length = 0
 
 func _physics_process(delta):
@@ -89,37 +101,6 @@ func _handle_camera_rotation(event):
 	rotate_y(deg2rad(-event.relative.x * camera_sensitivity))
 	head.rotate_x(deg2rad(-event.relative.y * camera_sensitivity))
 	head.rotation.x = clamp(head.rotation.x, deg2rad(MIN_CAMERA_ANGLE), deg2rad(MAX_CAMERA_ANGLE))
-
-func main_action():
-	if current_gun == null:
-		return
-
-	match current_gun.type:
-		"gun":
-			current_gun.shoot()
-		"health":
-			pass
-
-func second_action():
-	if current_gun == null:
-		return
-
-func main_interaction():
-	if current_gun == null and aimcast.get_collider() != null:
-		var item = aimcast.get_collider().get_parent()
-		if item is Item:
-			pickup(item)
-
-func second_interaction():
-	if current_gun == null:
-		return
-	match current_gun.get("type"):
-		"gun":
-			current_gun.reload()
-
-func third_interaction():
-	if current_gun != null and current_gun.has_method("dropped"):
-		drop(current_gun)
 
 func _get_movement_direction():
 	var direction = Vector3.DOWN
@@ -156,11 +137,7 @@ func pickup(item: Item):
 	if item.has_method("picked_up"):
 		var target := get_node("Head/Camera/GunPosition") as Spatial
 		rpc("remote_pickup", target.get_path(), item.get_path())
-		current_gun = item
-		if gun1 == null:
-			gun1 = item
-		else:
-			gun2 = item
+		inventory[current_slot] = item
 		match item.get("type"):
 			"gun":
 				get_node("HUD/Ammo").visible = true
@@ -189,17 +166,11 @@ remotesync func remote_pickup(target_path, item_path):
 	item.rotation = Vector3(0, 0, 0)
 	
 	item.on_pickup()
-	
 
 func drop(item: Item):
 	var response = item.dropped()
-	rpc("remote_drop", item.get_path(), self.throw_charge_length)
-	
-	if gun1 == current_gun:
-		gun1 = null
-	else:
-		gun2 = null
-	current_gun = null
+	rpc("remote_drop", item.get_path(), throw_charge_length)
+	inventory[current_slot] = null
 	get_node("HUD/Ammo").visible = false
 	
 	if item.get("type") == "gun":
@@ -217,7 +188,6 @@ remotesync func remote_drop(item_path, strength: float):
 	item.on_drop()
 	print(strength)
 	item.apply_central_impulse(-(5 + THROW_STRENGTH * strength) * head.global_transform.basis.z)
-	
 
 func set_main():
 	$Head/Camera.make_current()
