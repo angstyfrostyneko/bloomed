@@ -1,0 +1,940 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Maps/FirstArea.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Materials/BuildingDummyMaterial.tres" type="Material" id=2]
+[ext_resource path="res://Assets/Materials/RiverShaderMaterialFull.tres" type="Material" id=3]
+[ext_resource path="res://Assets/Materials/Concrete.tres" type="Material" id=4]
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0.301961, 0.301961, 0.301961, 1 )
+metallic_specular = 0.31
+
+[sub_resource type="ProceduralSky" id=1]
+
+[sub_resource type="Environment" id=2]
+background_mode = 2
+background_sky = SubResource( 1 )
+ambient_light_color = Color( 1, 0.956, 0.76, 1 )
+
+[node name="World" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="Players" type="Spatial" parent="."]
+
+[node name="SpawnPoint" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 7 )
+
+[node name="Environment" type="Spatial" parent="."]
+
+[node name="NorthShore" type="CSGBox" parent="Environment"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 115, -1, 0 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 350.0
+depth = 500.0
+material = ExtResource( 4 )
+
+[node name="ShoreGround" type="CSGBox" parent="Environment/NorthShore"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 350.0
+height = 8.0
+depth = 500.0
+material = ExtResource( 4 )
+
+[node name="Roads" type="Spatial" parent="Environment/NorthShore"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
+
+[node name="Major" type="Spatial" parent="Environment/NorthShore/Roads"]
+
+[node name="CSGBox" type="CSGBox" parent="Environment/NorthShore/Roads/Major"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -155, 0.5, -5 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 12.0
+height = 1.0
+depth = 460.0
+material = SubResource( 3 )
+
+[node name="CSGBox2" type="CSGBox" parent="Environment/NorthShore/Roads/Major"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.5, 231 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 292.0
+height = 1.0
+depth = 12.0
+material = SubResource( 3 )
+
+[node name="CSGBox3" type="CSGBox" parent="Environment/NorthShore/Roads/Major"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.5, -242 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 292.0
+height = 1.0
+depth = 14.0
+material = SubResource( 3 )
+
+[node name="Minor" type="Spatial" parent="Environment/NorthShore/Roads"]
+
+[node name="CSGBox2" type="CSGBox" parent="Environment/NorthShore/Roads/Minor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -108, 0.5, -82 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 82.0
+height = 1.0
+depth = 10.0
+material = SubResource( 3 )
+
+[node name="CSGBox9" type="CSGBox" parent="Environment/NorthShore/Roads/Minor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.5, -82 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 82.0
+height = 1.0
+depth = 10.0
+material = SubResource( 3 )
+
+[node name="CSGBox5" type="CSGBox" parent="Environment/NorthShore/Roads/Minor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -108, 0.5, 6 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 82.0
+height = 1.0
+depth = 10.0
+material = SubResource( 3 )
+
+[node name="CSGBox6" type="CSGBox" parent="Environment/NorthShore/Roads/Minor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -108, 0.5, 114 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 82.0
+height = 1.0
+depth = 10.0
+material = SubResource( 3 )
+
+[node name="CSGBox3" type="CSGBox" parent="Environment/NorthShore/Roads/Minor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -72, 0.5, -161 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 1.0
+depth = 148.0
+material = SubResource( 3 )
+
+[node name="CSGBox4" type="CSGBox" parent="Environment/NorthShore/Roads/Minor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -72, 0.5, -38 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 1.0
+depth = 78.0
+material = SubResource( 3 )
+
+[node name="CSGBox7" type="CSGBox" parent="Environment/NorthShore/Roads/Minor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -72, 0.5, 60 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 1.0
+depth = 98.0
+material = SubResource( 3 )
+
+[node name="CSGBox8" type="CSGBox" parent="Environment/NorthShore/Roads/Minor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -72, 0.5, 172 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 1.0
+depth = 106.0
+material = SubResource( 3 )
+
+[node name="Block1_1" type="Spatial" parent="Environment/NorthShore"]
+
+[node name="CSGBox" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 26, -220 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 30.0
+height = 50.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox10" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -97, 29, -220 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 30.0
+height = 56.0
+depth = 14.0
+material = ExtResource( 2 )
+
+[node name="CSGBox11" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -87, 31, -203 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 60.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox13" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 25, -182.5 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 12.0
+height = 48.0
+depth = 21.0
+material = ExtResource( 2 )
+
+[node name="CSGBox12" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -97, 26, -203 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 50.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox2" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 22, -200 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 30.0
+height = 42.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox3" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -140, 25, -177 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 48.0
+depth = 26.0
+material = ExtResource( 2 )
+
+[node name="CSGBox4" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -125, 22, -177 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 20.0
+height = 42.0
+depth = 26.0
+material = ExtResource( 2 )
+
+[node name="CSGBox5" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -119, 28, -156 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 20.0
+height = 54.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox6" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -119, 22, -142 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 20.0
+height = 42.0
+depth = 14.0
+material = ExtResource( 2 )
+
+[node name="CSGBox7" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -114, 24, -125 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 36.0
+height = 46.0
+depth = 14.0
+material = ExtResource( 2 )
+
+[node name="CSGBox14" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -140, 19, -101 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 36.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox15" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -125, 27, -101 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 20.0
+height = 52.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox16" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -108, 22, -101 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 14.0
+height = 42.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox17" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -94, 24, -101 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 14.0
+height = 46.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox8" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -101, 32, -148 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 62.0
+depth = 32.0
+material = ExtResource( 2 )
+
+[node name="CSGBox9" type="CSGBox" parent="Environment/NorthShore/Block1_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -89, 29, -145 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 14.0
+height = 56.0
+depth = 54.0
+material = ExtResource( 2 )
+
+[node name="Block1_2" type="Spatial" parent="Environment/NorthShore"]
+
+[node name="CSGBox18" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -131, 22, -61 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 24.0
+height = 42.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox19" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -133, 20, -47 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 28.0
+height = 38.0
+depth = 12.0
+material = ExtResource( 2 )
+
+[node name="CSGBox20" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -132, 24, -35 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 26.0
+height = 46.0
+depth = 12.0
+material = ExtResource( 2 )
+
+[node name="CSGBox21" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -140, 27, -17 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 52.0
+depth = 24.0
+material = ExtResource( 2 )
+
+[node name="CSGBox22" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -126, 22, -17 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 18.0
+height = 42.0
+depth = 24.0
+material = ExtResource( 2 )
+
+[node name="CSGBox23" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -112, 30, -18 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 58.0
+depth = 26.0
+material = ExtResource( 2 )
+
+[node name="CSGBox24" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -96, 28, -10 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 22.0
+height = 54.0
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="CSGBox25" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -96, 24, -23 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 22.0
+height = 46.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox26" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -102, 22, -37 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 34.0
+height = 42.0
+depth = 12.0
+material = ExtResource( 2 )
+
+[node name="CSGBox27" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -104, 15, -49 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 30.0
+height = 28.0
+depth = 12.0
+material = ExtResource( 2 )
+
+[node name="CSGBox28" type="CSGBox" parent="Environment/NorthShore/Block1_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -104, 16, -62 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 30.0
+height = 30.0
+depth = 14.0
+material = ExtResource( 2 )
+
+[node name="Block1_3" type="Spatial" parent="Environment/NorthShore"]
+
+[node name="CSGBox29" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -136, 25, 27 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 20.0
+height = 48.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox31" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -118, 24, 25 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 16.0
+height = 46.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox32" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -102, 31, 25 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 16.0
+height = 58.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox33" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -112, 28, 40 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 28.0
+height = 54.0
+depth = 14.0
+material = ExtResource( 2 )
+
+[node name="CSGBox34" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -112, 26, 51 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 28.0
+height = 50.0
+depth = 8.0
+material = ExtResource( 2 )
+
+[node name="CSGBox35" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -111, 22, 64 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 18.0
+height = 42.0
+depth = 18.0
+material = ExtResource( 2 )
+
+[node name="CSGBox37" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -116, 24, 79 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 28.0
+height = 46.0
+depth = 12.0
+material = ExtResource( 2 )
+
+[node name="CSGBox36" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -125, 25, 64 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 48.0
+depth = 18.0
+material = ExtResource( 2 )
+
+[node name="CSGBox38" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -138, 20, 64 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 16.0
+height = 38.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox39" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -138, 19, 80 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 16.0
+height = 36.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox40" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -133, 16, 96 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 26.0
+height = 30.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox41" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -109, 22, 96 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 22.0
+height = 42.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox30" type="CSGBox" parent="Environment/NorthShore/Block1_3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -136, 23, 45 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 20.0
+height = 44.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="Block1_4" type="Spatial" parent="Environment/NorthShore"]
+
+[node name="CSGBox42" type="CSGBox" parent="Environment/NorthShore/Block1_4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -114, 34, 133 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 60.0
+height = 66.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox43" type="CSGBox" parent="Environment/NorthShore/Block1_4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -114, 34, 211 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 60.0
+height = 66.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox44" type="CSGBox" parent="Environment/NorthShore/Block1_4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -115, 31, 172 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 56.0
+height = 60.0
+depth = 62.0
+material = ExtResource( 2 )
+
+[node name="CSGBox45" type="CSGBox" parent="Environment/NorthShore/Block1_4/CSGBox44"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -26, -22 )
+operation = 2
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 60.0
+height = 8.0
+depth = 6.0
+material = ExtResource( 2 )
+
+[node name="CSGBox46" type="CSGBox" parent="Environment/NorthShore/Block1_4/CSGBox44"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -26, 22 )
+operation = 2
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 60.0
+height = 8.0
+depth = 6.0
+material = ExtResource( 2 )
+
+[node name="Block2_1" type="Spatial" parent="Environment/NorthShore"]
+
+[node name="CSGBox45" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -49, 29, -217 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 26.0
+height = 56.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox49" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 31, -219 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 30.0
+height = 60.0
+depth = 12.0
+material = ExtResource( 2 )
+
+[node name="CSGBox50" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 31, -205 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 22.0
+height = 60.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox51" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 27, -205 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 8.0
+height = 52.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox52" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 29, -187 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 20.0
+height = 56.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox53" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 33, -187 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 62.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox46" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -57, 22, -201 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 42.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox47" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 26, -201 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 16.0
+height = 50.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox48" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -49, 33, -187 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 26.0
+height = 64.0
+depth = 12.0
+material = ExtResource( 2 )
+
+[node name="CSGBox54" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 28, -166 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 20.0
+height = 54.0
+depth = 24.0
+material = ExtResource( 2 )
+
+[node name="CSGBox55" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -37, 28, -162 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 54.0
+depth = 30.0
+material = ExtResource( 2 )
+
+[node name="CSGBox60" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -47, 30, -142 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 24.0
+height = 58.0
+depth = 10.0
+material = ExtResource( 2 )
+
+[node name="CSGBox61" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 34, -143 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 24.0
+height = 66.0
+depth = 8.0
+material = ExtResource( 2 )
+
+[node name="CSGBox63" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 27, -138 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 14.0
+height = 52.0
+depth = 18.0
+material = ExtResource( 2 )
+
+[node name="CSGBox64" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 28, -118 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 14.0
+height = 54.0
+depth = 22.0
+material = ExtResource( 2 )
+
+[node name="CSGBox65" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 26, -113 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 14.0
+height = 50.0
+depth = 20.0
+material = ExtResource( 2 )
+
+[node name="CSGBox66" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 25, -112 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 14.0
+height = 48.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox67" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 23, -118 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 14.0
+height = 44.0
+depth = 22.0
+material = ExtResource( 2 )
+
+[node name="CSGBox62" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 20, -131 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 24.0
+height = 38.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox56" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 34, -173 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 22.0
+height = 66.0
+depth = 8.0
+material = ExtResource( 2 )
+
+[node name="CSGBox57" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 30, -158 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 10.0
+height = 58.0
+depth = 22.0
+material = ExtResource( 2 )
+
+[node name="CSGBox58" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 34, -158 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 12.0
+height = 66.0
+depth = 22.0
+material = ExtResource( 2 )
+
+[node name="CSGBox59" type="CSGBox" parent="Environment/NorthShore/Block2_1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 24, -159 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 12.0
+height = 46.0
+depth = 24.0
+material = ExtResource( 2 )
+
+[node name="Block2_2" type="Spatial" parent="Environment/NorthShore"]
+
+[node name="CSGBox68" type="CSGBox" parent="Environment/NorthShore/Block2_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -47, 24, -63 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 24.0
+height = 46.0
+depth = 16.0
+material = ExtResource( 2 )
+
+[node name="CSGBox69" type="CSGBox" parent="Environment/NorthShore/Block2_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 24, -43 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 12.0
+height = 46.0
+depth = 24.0
+material = ExtResource( 2 )
+
+[node name="CSGBox70" type="CSGBox" parent="Environment/NorthShore/Block2_2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 24, -43 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 14.0
+height = 46.0
+depth = 24.0
+material = ExtResource( 2 )
+
+[node name="SouthShore" type="CSGBox" parent="Environment"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -180, -1, 0 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 100.0
+depth = 500.0
+material = ExtResource( 4 )
+
+[node name="ShoreGround" type="CSGBox" parent="Environment/SouthShore"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 100.0
+height = 8.0
+depth = 500.0
+material = ExtResource( 4 )
+
+[node name="Bedrock" type="CSGBox" parent="Environment"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 30, -11, 0 )
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+width = 520.0
+depth = 500.0
+material = ExtResource( 4 )
+
+[node name="River" type="CSGBox" parent="Environment"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -95, -6, 0 )
+width = 70.0
+height = 8.0
+depth = 500.0
+material = ExtResource( 3 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 2 )
+
+[node name="Sun" type="DirectionalLight" parent="WorldEnvironment"]
+transform = Transform( 0.866025, 0.482963, -0.12941, 0, 0.258819, 0.965926, 0.5, -0.836516, 0.224144, 0, 83, 0 )
+light_color = Color( 1, 0.941176, 0.713726, 1 )
+shadow_enabled = true

@@ -27,7 +27,7 @@ func _on_ConnectButton_pressed():
 
 func on_auth_finished():
 # warning-ignore:return_value_discarded
-	get_tree().change_scene('res://Maps/Gym.tscn')
+	get_tree().change_scene('res://Maps/FirstArea.tscn')
 
 func on_connection_failed():
 	self.connecting = false

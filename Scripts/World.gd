@@ -36,7 +36,7 @@ func spawn_player(playerData):
 		self.main_player = playerId
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-	newPlayer.transform.origin = Vector3(0, 10, 0)
+	newPlayer.transform.origin = $SpawnPoint.translation
 	$Players.add_child(newPlayer)
 
 func on_player_disconnected(id):

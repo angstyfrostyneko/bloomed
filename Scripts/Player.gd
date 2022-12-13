@@ -9,7 +9,7 @@ const THROW_STRENGTH := 35
 const MAX_THROW_CHARGE := 1.0
 
 export var camera_sensitivity: float = 0.05
-export var speed: float = 10.0
+export var speed: float = 2.5
 export var acceleration: float = 6.0
 export var jump_impulse: float = 12.0
 var velocity: Vector3 = Vector3.ZERO

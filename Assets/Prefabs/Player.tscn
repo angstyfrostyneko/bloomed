@@ -56,6 +56,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.625, 0 )
 
 [node name="Camera" type="Camera" parent="Head"]
 near = 0.01
+far = 256.0
 
 [node name="BackUpAimPoint" type="Position3D" parent="Head/Camera"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100 )
