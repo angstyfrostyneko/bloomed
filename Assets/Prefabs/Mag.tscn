@@ -4,12 +4,11 @@
 [ext_resource path="res://Assets/Materials/test.tres" type="PhysicsMaterial" id=2]
 
 [sub_resource type="ConvexPolygonShape" id=5]
-points = PoolVector3Array( 0.1, 0.1, 0.3, 0.1, 0.1, -0.3, -0.1, 0.1, 0.3, -0.1, 0.1, -0.3, 0.1, -0.1, 0.3, 0.1, -0.1, -0.3, -0.1, -0.1, 0.3, -0.1, -0.1, -0.3 )
 
 [sub_resource type="SpatialMaterial" id=1]
-albedo_color = Color( 1, 0.247059, 0.247059, 1 )
+albedo_color = Color( 0, 0.176471, 0.980392, 1 )
 
-[node name="Gun" type="RigidBody"]
+[node name="Mag" type="RigidBody"]
 collision_layer = 2
 collision_mask = 2
 mass = 4.0

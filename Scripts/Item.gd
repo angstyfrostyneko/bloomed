@@ -5,11 +5,8 @@ onready var collider: CollisionShape = $Collider
 
 var is_held: bool = false
 
-
-
 func _ready():
 	rset_config('transform', 1)
-
 
 func _physics_process(_delta):
 	if not self.is_network_master():
@@ -17,7 +14,6 @@ func _physics_process(_delta):
 	if not is_held:
 		if not self.sleeping:
 			rset_unreliable('transform', self.transform)
-		
 
 func on_pickup():
 	self.is_held = true

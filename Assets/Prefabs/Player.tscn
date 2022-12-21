@@ -62,7 +62,7 @@ far = 256.0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100 )
 
 [node name="AimCast" type="RayCast" parent="Head/Camera"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38419e-07, -1.19209e-07 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38419e-07, -0.551811 )
 enabled = true
 cast_to = Vector3( 0, -1, -1000 )
 collide_with_areas = true
@@ -105,6 +105,7 @@ text = "30/300"
 fit_content_height = true
 
 [node name="Money" type="RichTextLabel" parent="HUD"]
+visible = false
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 167.0
