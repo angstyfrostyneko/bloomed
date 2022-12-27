@@ -47,11 +47,13 @@ func _process(delta):
 		if not held_item.cooldown.is_stopped() or reloading:
 			return
 		if held_item.magazine == 0:
+			held_item.bullet_particles.emitting = false;
 			reload()
 			return
 		
 		held_item.magazine -= 1
 		held_item.cooldown.start()
+		held_item.bullet_particles.emitting = true;
 		update_ammo_counter(held_item.magazine)
 		
 		var collider = aimcast.get_collider()
@@ -59,6 +61,10 @@ func _process(delta):
 			return
 		if collider.is_in_group("Player"):
 			rpc_id(int(collider.name), "damage", held_item.damage)
+
+	if Input.is_action_just_released("shoot"):
+		if held_item != null and held_item.type == "gun":
+			held_item.bullet_particles.emitting = false;
 
 	if Input.is_action_just_pressed("pickup"):
 		if held_item != null:
