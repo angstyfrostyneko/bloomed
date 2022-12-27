@@ -1,5 +1,5 @@
 extends Item
 
-var type = "magazine"
-var weapon_class = Weapon.Class.RIFLE
+var type = Item.Type.MAG
+var weapon_class = Item.Class.RIFLE
 export var size = 30

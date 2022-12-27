@@ -944,8 +944,11 @@ shadow_enabled = true
 [node name="GunSpawns" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -40.2614, 0.332797, 5.38928 )
 
+[node name="Mag2" parent="GunSpawns" instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.92341, 2.82195, 0.420942 )
+
 [node name="Mag" parent="GunSpawns" instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.77839, 0.914731, 1.47967 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.67247, 2.61178, 1.1483 )
 
 [node name="Gun2" parent="GunSpawns" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.59073, 0.418388, 1.68611 )

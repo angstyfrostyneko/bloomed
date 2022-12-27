@@ -2,8 +2,11 @@ extends RigidBody
 class_name Item
 
 onready var collider: CollisionShape = $Collider
+enum Type {GUN, BANDAGE, MAG}
+enum Class {PISTOL, RIFLE, SHOTGUN}
 
 var is_held: bool = false
+var is_big: bool = false
 
 func _ready():
 	rset_config('transform', 1)

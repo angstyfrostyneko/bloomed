@@ -1,7 +1,7 @@
 extends Item
 
-var type = "gun"
-var weapon_class = Weapon.Class.RIFLE
+var type = Item.Type.GUN
+var weapon_class = Item.Class.RIFLE
 
 # For the player to access more easily
 onready var cooldown = $Cooldown

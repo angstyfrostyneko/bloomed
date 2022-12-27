@@ -42,7 +42,7 @@ func _process(delta):
 	if Input.is_action_pressed("shoot"):
 		if held_item == null:
 			return
-		if held_item.type != "gun":
+		if held_item.type != Item.Type.GUN:
 			return
 		if not held_item.cooldown.is_stopped() or reloading:
 			return
@@ -63,7 +63,7 @@ func _process(delta):
 			rpc_id(int(collider.name), "damage", held_item.damage)
 
 	if Input.is_action_just_released("shoot"):
-		if held_item != null and held_item.type == "gun":
+		if held_item != null and held_item.type == Item.Type.GUN:
 			held_item.bullet_particles.emitting = false;
 
 	if Input.is_action_just_pressed("pickup"):
@@ -76,19 +76,28 @@ func _process(delta):
 	if Input.is_action_just_pressed("reload"):
 		if held_item == null:
 			return
-		if held_item.type == "gun":
+		if held_item.type == Item.Type.GUN:
 			reload()
 
 	if Input.is_action_just_pressed("drop"):
 		throw_charging = true
 	elif throw_charging:
 		throw_charge_length = min(MAX_THROW_CHARGE, throw_charge_length + delta)
-
+	
 	if Input.is_action_just_released("drop"):
 		throw_charging = false
 		if held_item != null and held_item.has_method("on_drop"):
 			drop(held_item)
 		throw_charge_length = 0
+	
+	if Input.is_action_just_pressed("inventory_first"):
+		switch_item(0)
+	if Input.is_action_just_pressed("inventory_second"):
+		switch_item(1)
+	if Input.is_action_just_pressed("inventory_third"):
+		switch_item(2)
+	if Input.is_action_just_pressed("inventory_big"):
+		switch_item(3)
 
 func _physics_process(delta):
 	if not is_network_master():
@@ -134,7 +143,16 @@ func modify_money(amount):
 	$HUD/Money.bbcode_text = "[color=#00FF00]$[/color]" + str(money)
 
 func update_ammo_counter(magazine):
-	var reserve = 30
+	var reserve = 0
+	for i in range(4):
+		if inventory[i] == null:
+			continue
+		if inventory[current_slot] == null:
+			continue
+		if inventory[i].type != Item.Type.MAG:
+			continue
+		if inventory[i].weapon_class == inventory[current_slot].weapon_class:
+			reserve += inventory[i].size
 	var magazine_color = "#FFFFFF"
 	var reserve_color = "#FFFFFF"
 	if magazine < 10:
@@ -144,21 +162,43 @@ func update_ammo_counter(magazine):
 
 	$HUD/Ammo.bbcode_text = "[color=%s]%s[/color]/[color=%s]%s" % [magazine_color, magazine, reserve_color, reserve]
 
+func switch_item(new_slot):
+	if inventory[current_slot] != null:
+		inventory[current_slot].visible = false
+		if inventory[current_slot].type == Item.Type.GUN:
+			$HUD/Ammo.visible = false
+	if inventory[new_slot] != null:
+		inventory[new_slot].visible = true
+		if inventory[new_slot].type == Item.Type.GUN:
+			$HUD/Ammo.visible = true
+			update_ammo_counter(inventory[new_slot].magazine)
+	current_slot = new_slot
+	reloading = false
+
 func reload():
 	var gun = inventory[current_slot]
 	if reloading:
 		return
-#	var ammo_requested = min(ammunition[ammo_type], gun.magazine_size - gun.ammo_magazine)
-#	if ammo_requested > 0:
-#		reloading = true
-#		gun.reload_timer.start()
-#		yield(gun.reload_timer, "timeout")
-#		if reloading == false:
-#			return
-#		gun.ammo_magazine += ammo_requested
-#		ammunition[ammo_type] -= ammo_requested
-#		update_ammo_counter(gun.ammo_magazine, gun.magazine_size, ammunition[ammo_type], gun.reserve_size)
-#		reloading = false
+	if gun.type != Item.Type.GUN:
+		return
+	for i in range(4):
+		if inventory[i] == null:
+			continue
+		if inventory[i].type != Item.Type.MAG:
+			continue
+		if inventory[i].weapon_class == gun.weapon_class:
+			if inventory[i].size == 0:
+				continue
+			reloading = true
+			gun.reload_timer.start()
+			yield(gun.reload_timer, "timeout")
+			if reloading == false:
+				return
+			gun.magazine = inventory[i].size
+			inventory[i].size = 0
+			reloading = false
+			update_ammo_counter(gun.magazine)
+			return
 
 remotesync func damage(amount):
 	var healthUI = $HUD/Health
@@ -172,16 +212,18 @@ remotesync func damage(amount):
 		print("i am ded")
 
 func pickup(item: Item):
-	if item.has_method("on_pickup"):
-		var target = get_node("Head/Camera/GunPosition")
-		rpc("remote_pickup", target.get_path(), item.get_path())
-		inventory[current_slot] = item
-		match item.get("type"):
-			"gun":
-				$HUD/Ammo.visible = true
-			"bandage":
-				pass
-		item.is_held = true
+	if !item.has_method("on_pickup"):
+		return
+	if item.is_big and current_slot != 3:
+		return
+
+	var target = get_node("Head/Camera/GunPosition")
+	rpc("remote_pickup", target.get_path(), item.get_path())
+	inventory[current_slot] = item
+	if item.type == Item.Type.GUN:
+		$HUD/Ammo.visible = true
+		update_ammo_counter(item.magazine)
+	item.is_held = true
 
 remotesync func remote_pickup(target_path, item_path):
 	var target = get_node(target_path)
