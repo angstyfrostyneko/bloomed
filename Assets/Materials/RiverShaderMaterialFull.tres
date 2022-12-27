@@ -1,22 +1,9 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=2]
 
 [ext_resource path="res://Assets/Materials/RiverShaderMaterial.tres" type="Shader" id=1]
-[ext_resource path="res://Assets/Textures/water1_normal_bump.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Textures/normal.jpg" type="Texture" id=2]
 
 [resource]
 render_priority = -1
 shader = ExtResource( 1 )
-shader_param/normal_scale = 0.5
-shader_param/uv_scale = Vector3( 57.12, 8, 1 )
-shader_param/edge_fade = 0.25
-shader_param/albedo_color = Transform( 0.2, 0.15, 0, 0.5, 0.2, 0.5, 0.75, 0.5, 0, 0, 0, 0 )
-shader_param/albedo_depth = 10.0
-shader_param/albedo_depth_curve = 0.25
-shader_param/transparency_clarity = 10.0
-shader_param/transparency_depth_curve = 0.25
-shader_param/transparency_refraction = 0.05
-shader_param/flow_speed = 0.0025
-shader_param/foam_color = Color( 0.9, 0.9, 0.9, 1 )
-shader_param/i_lod0_distance = 128.0
-shader_param/i_uv2_sides = 2
-shader_param/normal_bump_texture = ExtResource( 2 )
+shader_param/normal_texture = ExtResource( 2 )
