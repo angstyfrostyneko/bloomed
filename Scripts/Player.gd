@@ -47,7 +47,6 @@ func _process(delta):
 		if not held_item.cooldown.is_stopped() or reloading:
 			return
 		if held_item.magazine == 0:
-			held_item.bullet_particles.emitting = false;
 			reload()
 			return
 		
@@ -64,7 +63,7 @@ func _process(delta):
 
 	if Input.is_action_just_released("shoot"):
 		if held_item != null and held_item.type == Item.Type.GUN:
-			held_item.bullet_particles.emitting = false;
+			pass
 
 	if Input.is_action_just_pressed("pickup"):
 		if held_item != null:
@@ -167,12 +166,12 @@ func switch_item(new_slot):
 		inventory[current_slot].visible = false
 		if inventory[current_slot].type == Item.Type.GUN:
 			$HUD/Ammo.visible = false
+	current_slot = new_slot
 	if inventory[new_slot] != null:
 		inventory[new_slot].visible = true
 		if inventory[new_slot].type == Item.Type.GUN:
 			$HUD/Ammo.visible = true
 			update_ammo_counter(inventory[new_slot].magazine)
-	current_slot = new_slot
 	reloading = false
 
 func reload():

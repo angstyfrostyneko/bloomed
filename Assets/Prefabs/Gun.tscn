@@ -13,7 +13,10 @@ albedo_color = Color( 1, 0.247059, 0.247059, 1 )
 flag_rotate_y = true
 direction = Vector3( 0, 0, 0 )
 spread = 0.0
-initial_velocity = 1.0
+initial_velocity = 1.5
+initial_velocity_random = 0.25
+angular_velocity = 45.0
+angular_velocity_random = 0.13
 
 [sub_resource type="SpatialMaterial" id=7]
 albedo_color = Color( 1, 0.87451, 0.156863, 1 )
@@ -57,8 +60,11 @@ shape = SubResource( 5 )
 [node name="BulletParticles" type="Particles" parent="."]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.171968, 0.0631905, -0.0182867 )
 emitting = false
-amount = 1
-lifetime = 0.09
+amount = 10
+lifetime = 0.89
 visibility_aabb = AABB( -0.026043, -0.0257405, -0.0235611, 0.0520759, 0.051481, 0.0471123 )
+local_coords = false
 process_material = SubResource( 6 )
 draw_pass_1 = SubResource( 8 )
+
+[connection signal="timeout" from="Cooldown" to="." method="_on_Cooldown_timeout"]

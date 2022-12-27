@@ -10,3 +10,7 @@ onready var bullet_particles = $BulletParticles
 
 var damage = 10
 var magazine = 100
+
+
+func _on_Cooldown_timeout():
+	bullet_particles.emitting = false
