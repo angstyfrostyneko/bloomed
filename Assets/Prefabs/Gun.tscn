@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/Gun.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Materials/test.tres" type="PhysicsMaterial" id=2]
@@ -8,6 +8,19 @@ points = PoolVector3Array( 0.1, 0.1, 0.3, 0.1, 0.1, -0.3, -0.1, 0.1, 0.3, -0.1, 
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 1, 0.247059, 0.247059, 1 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+flag_rotate_y = true
+direction = Vector3( 0, 0, 0 )
+spread = 0.0
+initial_velocity = 1.0
+
+[sub_resource type="SpatialMaterial" id=7]
+albedo_color = Color( 1, 0.87451, 0.156863, 1 )
+
+[sub_resource type="CubeMesh" id=8]
+material = SubResource( 7 )
+size = Vector3( 0.01, 0.01, 0.02 )
 
 [node name="Gun" type="RigidBody"]
 collision_layer = 2
@@ -40,3 +53,13 @@ one_shot = true
 
 [node name="Collider" type="CollisionShape" parent="."]
 shape = SubResource( 5 )
+
+[node name="BulletParticles" type="Particles" parent="."]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.106948, 0.0969755, 0.292745 )
+emitting = false
+amount = 1
+lifetime = 0.09
+visibility_aabb = AABB( -0.026043, -0.0257405, -0.0235611, 0.0520759, 0.051481, 0.0471123 )
+local_coords = false
+process_material = SubResource( 6 )
+draw_pass_1 = SubResource( 8 )
