@@ -19,9 +19,9 @@ albedo_color = Color( 0, 0, 0, 1 )
 material = SubResource( 3 )
 size = Vector3( 1.2, 0.5, 0.4 )
 
-[sub_resource type="CapsuleShape" id=5]
+[sub_resource type="CylinderShape" id=8]
+height = 2.25
 radius = 0.5
-height = 1.25
 
 [sub_resource type="DynamicFontData" id=7]
 font_path = "res://Assets/Fonts/Inter.ttf"
@@ -48,8 +48,8 @@ visible = false
 mesh = SubResource( 4 )
 
 [node name="Collider" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.125, 0 )
-shape = SubResource( 5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0 )
+shape = SubResource( 8 )
 
 [node name="Head" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.625, 0 )
@@ -73,6 +73,13 @@ transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.24402
 [node name="FloorCheck" type="RayCast" parent="."]
 enabled = true
 cast_to = Vector3( 0, -0.2, 0 )
+
+[node name="NameTag" type="Label3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0 )
+pixel_size = 0.025
+billboard = 2
+alpha_cut = 1
+text = "Placeholder"
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

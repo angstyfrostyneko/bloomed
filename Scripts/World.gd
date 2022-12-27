@@ -30,6 +30,7 @@ func spawn_player(playerData):
 	var newPlayer = self.playerCharacterScene.instance()
 	newPlayer.set_network_master(playerId)
 	newPlayer.set_name(str(playerId))
+	newPlayer.set_display_name(playerData[NetworkManager.PLAYER_NAME_FIELD])
 	
 	if playerId == get_tree().get_network_unique_id():
 		newPlayer.set_main()

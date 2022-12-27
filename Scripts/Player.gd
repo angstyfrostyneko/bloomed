@@ -11,7 +11,7 @@ const MAX_THROW_CHARGE := 1.0
 export var camera_sensitivity: float = 0.05
 export var speed: float = 2.5
 export var acceleration: float = 6.0
-export var jump_impulse: float = 12.0
+export var jump_impulse: float = 4.0
 var velocity: Vector3 = Vector3.ZERO
 
 onready var world: Spatial = get_node("/root/World")
@@ -253,6 +253,9 @@ remotesync func remote_drop(item_path, strength: float):
 	item.on_drop()
 	print(strength)
 	item.apply_central_impulse(-(5 + THROW_STRENGTH * strength) * $Head.global_transform.basis.z)
+
+func set_display_name(name):
+	$NameTag.text = name
 
 func set_main():
 	$Head/Camera.make_current()
