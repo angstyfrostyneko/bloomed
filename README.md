@@ -1,0 +1,12 @@
+## TODO
+- add hand slot to inventory
+- UI for the inventory
+- ammo counter
+- death
+- random respawns
+- add pistol (and mag for it)
+- crouching and running (with stamina)
+- sync for joining mid game
+- "pause"/escape menu
+- FFA Map
+- interpolation
