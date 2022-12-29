@@ -59,11 +59,7 @@ func _process(delta):
 		if collider == null:
 			return
 		if collider.is_in_group("Player"):
-			rpc_id(int(collider.name), "damage", held_item.damage)
-
-	if Input.is_action_just_released("shoot"):
-		if held_item != null and held_item.type == Item.Type.GUN:
-			pass
+			rpc_id(int(collider.name), "damage", hand.damage)
 
 	if Input.is_action_just_pressed("pickup"):
 		if held_item != null:
