@@ -185,18 +185,15 @@ func reload():
 			continue
 		if inventory[i].type != Item.Type.MAG:
 			continue
-		if inventory[i].weapon_class == gun.weapon_class:
-			if inventory[i].size == 0:
-				continue
-			reloading = true
-			gun.reload_timer.start()
-			yield(gun.reload_timer, "timeout")
-			if reloading == false:
-				return
-			gun.magazine = inventory[i].size
-			inventory[i].size = 0
-			reloading = false
-			update_ammo_counter(gun.magazine)
+		if inventory[i].weapon_class != gun.weapon_class:
+			continue
+		if inventory[i].size == 0:
+			continue
+		
+		reloading = true
+		gun.reload_timer.start()
+		yield(gun.reload_timer, "timeout")
+		if reloading == false:
 			return
 
 remotesync func damage(amount):
