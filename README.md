@@ -4,7 +4,7 @@
 - ammo counter
 - death
 - random respawns
-- add pistol (and mag for it)
+- ~~add pistol (and mag for it)~~
 - crouching and running (with stamina)
 - sync for joining mid game
 - "pause"/escape menu
