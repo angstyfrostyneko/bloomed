@@ -1,5 +1,5 @@
 ## TODO
-- add hand slot to inventory
+- ~~add hand slot to inventory~~
 - UI for the inventory
 - ammo counter
 - death
