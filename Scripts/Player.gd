@@ -140,26 +140,13 @@ func _get_movement_direction(delta):
 	if Input.is_action_just_pressed("jump") and $FloorCheck.is_colliding():
 		velocity.y = jump_impulse
 	if Input.is_action_just_pressed("crouch"):
-		# modify model and hitbox size
-		if crouching:
-			$Body.mesh.set("mid_height", STANDING_HEIGHT[0])
-			$Collider.shape.set("height", STANDING_HEIGHT[1])
-			speed = WALKING_SPEED
-			crouching = false
-		else:
-			$Body.mesh.set("mid_height", CROUCHING_HEIGHT[0])
-			$Collider.shape.set("height", CROUCHING_HEIGHT[1])
-			speed = CROUCHING_SPEED
-			crouching = true
-			running = false
+		crouching = !crouching
+		running = false
+		rpc("remote_crouch", crouching)
 	if Input.is_action_just_pressed("run"):
-		if running:
-			speed = WALKING_SPEED
-			running = false
-		else:
-			speed = RUNNING_SPEED
-			running = true
-			crouching = false
+		running = !running
+		crouching = false
+		rpc("remote_run", running)
 	if running:
 		stamina -= delta
 	if !running and stamina < MAX_STAMINA:
@@ -167,8 +154,8 @@ func _get_movement_direction(delta):
 	elif stamina > MAX_STAMINA:
 		stamina = MAX_STAMINA
 	if stamina <= 0:
-		speed = WALKING_SPEED
 		running = false
+		rpc("remote_run", false)
 	return direction
 
 func modify_money(amount):
@@ -259,6 +246,19 @@ remotesync func damage(amount):
 	if health <= 0:
 		# TODO: implement death
 		print("i am ded")
+
+remotesync func remote_crouch(crouched):
+	if crouched:
+		$Body.mesh.set("mid_height", STANDING_HEIGHT[0])
+		$Collider.shape.set("height", STANDING_HEIGHT[1])
+		self.speed = WALKING_SPEED
+	else:
+		$Body.mesh.set("mid_height", CROUCHING_HEIGHT[0])
+		$Collider.shape.set("height", CROUCHING_HEIGHT[1])
+		self.speed = CROUCHING_SPEED
+
+remotesync func remote_run(ran): #I have NO idea what to name this var
+	self.speed = WALKING_SPEED if ran else RUNNING_SPEED
 
 func pickup(item: Item):
 	if !item.has_method("on_pickup"):
