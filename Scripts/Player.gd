@@ -49,55 +49,11 @@ func _ready():
 func _process(delta):
 	if not is_network_master():
 		return
-	
 	if not handles_input:
 		return
 	
-	if Input.is_action_pressed("shoot"):
-		if inventory[HAND] == null:
-			return
-		if inventory[HAND].type != Item.Type.GUN:
-			return
-		if not inventory[HAND].cooldown.is_stopped() or reloading:
-			return
-		if inventory[HAND].magazine == 0:
-			reload()
-			return
-		
-		inventory[HAND].magazine -= 1
-		inventory[HAND].cooldown.start()
-		inventory[HAND].bullet_particles.emitting = true;
-		update_ammo_counter(inventory[HAND].magazine)
-		
-		var collider = aimcast.get_collider()
-		if collider == null:
-			return
-		if collider.is_in_group("Player"):
-			rpc_id(int(collider.name), "damage", inventory[HAND].damage)
-
-	if Input.is_action_just_pressed("pickup"):
-		if inventory[HAND] != null:
-			return
-		var collider = aimcast.get_collider()
-		if collider != null and collider.get_parent() is Item:
-			pickup(collider.get_parent())
-
-	if Input.is_action_just_pressed("reload"):
-		if inventory[HAND] == null:
-			return
-		if inventory[HAND].type == Item.Type.GUN:
-			reload()
-
-	if Input.is_action_just_pressed("drop"):
-		throw_charging = true
-	elif throw_charging:
-		throw_charge_length = min(MAX_THROW_CHARGE, throw_charge_length + delta)
-	
-	if Input.is_action_just_released("drop"):
-		throw_charging = false
-		if inventory[HAND] != null and inventory[HAND].has_method("on_drop"):
-			drop(inventory[HAND])
-		throw_charge_length = 0
+	shoot_and_reload()
+	pick_and_drop(delta)
 	
 	if Input.is_action_just_pressed("inventory_first"):
 		swap_item(1)
@@ -163,6 +119,49 @@ func _get_movement_direction(delta):
 		rpc("remote_run", false)
 	return direction
 
+func shoot_and_reload():
+	if Input.is_action_pressed("shoot"):
+		if inventory[HAND] == null:
+			return
+		if inventory[HAND].type != Item.Type.GUN:
+			return
+		if not inventory[HAND].cooldown.is_stopped() or reloading:
+			return
+		if inventory[HAND].magazine == 0:
+			reload()
+			return
+		inventory[HAND].magazine -= 1
+		inventory[HAND].cooldown.start()
+		inventory[HAND].bullet_particles.emitting = true;
+		update_ammo_counter(inventory[HAND].magazine)
+		var collider = aimcast.get_collider()
+		if collider == null:
+			return
+		if collider.is_in_group("Player"):
+			rpc_id(int(collider.name), "damage", inventory[HAND].damage)
+	if Input.is_action_just_pressed("reload"):
+		if inventory[HAND] == null:
+			return
+		if inventory[HAND].type == Item.Type.GUN:
+			reload()
+
+func pick_and_drop(delta):
+	if Input.is_action_just_pressed("pickup"):
+		if inventory[HAND] != null:
+			return
+		var collider = aimcast.get_collider()
+		if collider != null and collider.get_parent() is Item:
+			pickup(collider.get_parent())
+	if Input.is_action_just_pressed("drop"):
+		throw_charging = true
+	elif throw_charging:
+		throw_charge_length = min(MAX_THROW_CHARGE, throw_charge_length + delta)
+	if Input.is_action_just_released("drop"):
+		throw_charging = false
+		if inventory[HAND] != null and inventory[HAND].has_method("on_drop"):
+			drop(inventory[HAND])
+		throw_charge_length = 0
+
 func modify_money(amount):
 	money += amount
 	$HUD/Money.bbcode_text = "[color=#00FF00]$[/color]%s" % str(money)
@@ -184,7 +183,6 @@ func update_ammo_counter(magazine):
 		magazine_color = "#FF0000"
 	if reserve < 30:
 		reserve_color = "#FF0000"
-
 	$HUD/Ammo.bbcode_text = "[color=%s]%s[/color]/[color=%s]%s" % [magazine_color, magazine, reserve_color, reserve]
 
 func swap_item(slot):
@@ -302,9 +300,7 @@ remotesync func remote_drop(item_path, strength: float):
 	item.get_parent().remove_child(item)
 	world.add_child(item)
 	item.set_owner(world)
-	
 	item.translation = $Head.global_translation + Vector3(0,-0.125,0)
-	
 	item.on_drop()
 	print(strength)
 	item.apply_central_impulse(-(5 + THROW_STRENGTH * strength) * $Head.global_transform.basis.z)
