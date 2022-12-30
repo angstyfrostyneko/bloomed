@@ -5,7 +5,7 @@
 - death
 - random respawns
 - ~~add pistol (and mag for it)~~
-- crouching and running (with stamina)
+- ~~crouching and running (with stamina)~~
 - sync for joining mid game
 - "pause"/escape menu
 - FFA Map

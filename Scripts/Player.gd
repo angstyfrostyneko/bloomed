@@ -1,6 +1,13 @@
 extends KinematicBody
 class_name Player
 
+const CROUCHING_SPEED := 1
+const WALKING_SPEED := 2.5
+const RUNNING_SPEED := 4.75
+const MAX_STAMINA := 7.5
+# model and hitbox respectively
+const STANDING_HEIGHT = [1.25, 2.25]
+const CROUCHING_HEIGHT = [0.75, 1.75]
 
 const MIN_CAMERA_ANGLE = -90
 const MAX_CAMERA_ANGLE = 90
@@ -10,7 +17,7 @@ const MAX_THROW_CHARGE := 1.0
 const HAND = 0
 
 export var camera_sensitivity: float = 0.05
-export var speed: float = 2.5
+export var speed: float = WALKING_SPEED
 export var acceleration: float = 6.0
 export var jump_impulse: float = 4.0
 var velocity: Vector3 = Vector3.ZERO
@@ -25,9 +32,12 @@ var money = 250
 # ammo is magazines you hold in a slot
 var inventory = [null, null, null, null, null]
 var reloading = false
+var crouching = false
+var running = false
 
 var throw_charging := false
 var throw_charge_length := 0.0
+var stamina = MAX_STAMINA
 
 func _ready():
 	rset_config('transform', 1)
@@ -96,7 +106,7 @@ func _process(delta):
 func _physics_process(delta):
 	if not is_network_master():
 		return
-	var movement = _get_movement_direction()
+	var movement = _get_movement_direction(delta)
 	
 	velocity.x = lerp(velocity.x,movement.x * speed,acceleration * delta)
 	velocity.z = lerp(velocity.z,movement.z * speed,acceleration * delta)
@@ -116,7 +126,7 @@ func _handle_camera_rotation(event):
 	$Head.rotate_x(deg2rad(-event.relative.y * camera_sensitivity))
 	$Head.rotation.x = clamp($Head.rotation.x, deg2rad(MIN_CAMERA_ANGLE), deg2rad(MAX_CAMERA_ANGLE))
 
-func _get_movement_direction():
+func _get_movement_direction(delta):
 	var direction = Vector3.DOWN
 	
 	if Input.is_action_pressed("forward"):
@@ -129,7 +139,36 @@ func _get_movement_direction():
 		direction += transform.basis.x
 	if Input.is_action_just_pressed("jump") and $FloorCheck.is_colliding():
 		velocity.y = jump_impulse
-	
+	if Input.is_action_just_pressed("crouch"):
+		# modify model and hitbox size
+		if crouching:
+			$Body.mesh.set("mid_height", STANDING_HEIGHT[0])
+			$Collider.shape.set("height", STANDING_HEIGHT[1])
+			speed = WALKING_SPEED
+			crouching = false
+		else:
+			$Body.mesh.set("mid_height", CROUCHING_HEIGHT[0])
+			$Collider.shape.set("height", CROUCHING_HEIGHT[1])
+			speed = CROUCHING_SPEED
+			crouching = true
+			running = false
+	if Input.is_action_just_pressed("run"):
+		if running:
+			speed = WALKING_SPEED
+			running = false
+		else:
+			speed = RUNNING_SPEED
+			running = true
+			crouching = false
+	if running:
+		stamina -= delta
+	if !running and stamina < MAX_STAMINA:
+		stamina += delta
+	elif stamina > MAX_STAMINA:
+		stamina = MAX_STAMINA
+	if stamina <= 0:
+		speed = WALKING_SPEED
+		running = false
 	return direction
 
 func modify_money(amount):
