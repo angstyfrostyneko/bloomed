@@ -39,6 +39,8 @@ var throw_charging := false
 var throw_charge_length := 0.0
 var stamina = MAX_STAMINA
 
+var handles_input := true
+
 func _ready():
 	rset_config('transform', 1)
 	modify_money(0)
@@ -47,7 +49,10 @@ func _ready():
 func _process(delta):
 	if not is_network_master():
 		return
-		
+	
+	if not handles_input:
+		return
+	
 	if Input.is_action_pressed("shoot"):
 		if inventory[HAND] == null:
 			return

@@ -14,7 +14,6 @@ const PLAYER_ID_FIELD := 'id'
 const PLAYER_NAME_FIELD := 'name'
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	reset_network()
 # warning-ignore:return_value_discarded
