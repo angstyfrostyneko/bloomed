@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Shared/Entities/Player.gd" type="Script" id=2]
+[ext_resource path="res://Shared/Network/Graphics/ClientMeshInstance.gd" type="Script" id=4]
+[ext_resource path="res://Client/Assets/Meshes/PlayerMesh.tres" type="CapsuleMesh" id=5]
+
+[sub_resource type="CylinderShape" id=8]
+resource_local_to_scene = true
+height = 2.25
+radius = 0.5
+
+[sub_resource type="SphereMesh" id=9]
+radius = 0.1
+height = 0.2
+
+[node name="Player" type="KinematicBody" groups=["Player"]]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_horizontal_guides_": [  ]
+}
+
+[node name="Body" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.125, 0 )
+script = ExtResource( 4 )
+mesh = ExtResource( 5 )
+
+[node name="Collider" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0 )
+shape = SubResource( 8 )
+
+[node name="Head" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.625, 0 )
+
+[node name="Hand" type="Spatial" parent="Head"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.3, -0.5, -0.5 )
+script = ExtResource( 4 )
+mesh = SubResource( 9 )
+
+[node name="Camera" type="Camera" parent="Head"]
+near = 0.01
+far = 256.0
+
+[node name="BackUpAimPoint" type="Position3D" parent="Head/Camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100 )
+
+[node name="AimCast" type="RayCast" parent="Head/Camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38419e-07, -0.551811 )
+enabled = true
+cast_to = Vector3( 0, -1, -1000 )
+collide_with_areas = true
+
+[node name="GunPosition" type="Spatial" parent="Head/Camera"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.244025, -0.261438, -0.521037 )
+
+[node name="FloorCheck" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( 0, -0.2, 0 )
+
+[node name="NameTag" type="Label3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0 )
+pixel_size = 0.025
+billboard = 2
+alpha_cut = 1
+text = "Placeholder"

@@ -1,0 +1,4 @@
+[gd_resource type="DynamicFontData" format=2]
+
+[resource]
+font_path = "res://Client/Assets/Fonts/Inter.ttf"

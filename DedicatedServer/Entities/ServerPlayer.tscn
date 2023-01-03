@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Shared/Entities/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://DedicatedServer/Entities/ServerPlayer.gd" type="Script" id=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 1, 0.054902, 0.054902, 1 )
+
+[sub_resource type="CapsuleMesh" id=2]
+resource_local_to_scene = true
+material = SubResource( 1 )
+radius = 0.5
+mid_height = 1.25
+radial_segments = 32
+rings = 4
+
+[sub_resource type="CylinderShape" id=3]
+resource_local_to_scene = true
+height = 2.25
+radius = 0.5
+
+[node name="ServerPlayer" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Body" parent="." index="0"]
+mesh = SubResource( 2 )
+
+[node name="Collider" parent="." index="1"]
+shape = SubResource( 3 )

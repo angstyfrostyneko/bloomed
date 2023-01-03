@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Client/Prefabs/Gun.gd" type="Script" id=1]
+[ext_resource path="res://Client/Assets/Materials/test.tres" type="PhysicsMaterial" id=2]
+
+[sub_resource type="ConvexPolygonShape" id=5]
+points = PoolVector3Array( 0.1, 0.1, 0.3, 0.1, 0.1, -0.3, -0.1, 0.1, 0.3, -0.1, 0.1, -0.3, 0.1, -0.1, 0.3, 0.1, -0.1, -0.3, -0.1, -0.1, 0.3, -0.1, -0.1, -0.3 )
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.984314, 0.968627, 0.0313726, 1 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+flag_rotate_y = true
+direction = Vector3( 0, 0, 0 )
+spread = 0.0
+initial_velocity = 1.5
+initial_velocity_random = 0.25
+angular_velocity = 45.0
+angular_velocity_random = 0.13
+
+[sub_resource type="SpatialMaterial" id=7]
+albedo_color = Color( 1, 0.87451, 0.156863, 1 )
+
+[sub_resource type="CubeMesh" id=8]
+material = SubResource( 7 )
+size = Vector3( 0.06, 0.06, 0.16 )
+
+[node name="Pistol" type="RigidBody"]
+collision_layer = 4
+collision_mask = 5
+mass = 4.0
+physics_material_override = ExtResource( 2 )
+angular_damp = 1.0
+script = ExtResource( 1 )
+weapon_class = 0
+magazine = 12
+
+[node name="PickupDetection" type="Area" parent="."]
+monitoring = false
+monitorable = false
+
+[node name="Shape" type="CollisionShape" parent="PickupDetection"]
+shape = SubResource( 5 )
+
+[node name="Model" type="CSGBox" parent="."]
+width = 0.2
+height = 0.2
+depth = 0.6
+material = SubResource( 1 )
+
+[node name="Cooldown" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="Reload" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="Collider" type="CollisionShape" parent="."]
+shape = SubResource( 5 )
+
+[node name="BulletParticles" type="Particles" parent="."]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.171968, 0.0631905, -0.0182867 )
+emitting = false
+amount = 10
+lifetime = 0.89
+visibility_aabb = AABB( -0.026043, -0.0257405, -0.0235611, 0.0520759, 0.051481, 0.0471123 )
+local_coords = false
+process_material = SubResource( 6 )
+draw_pass_1 = SubResource( 8 )
+
+[connection signal="timeout" from="Cooldown" to="." method="_on_Cooldown_timeout"]

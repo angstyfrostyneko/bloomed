@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Client/ClientMain.gd" type="Script" id=1]
+
+[node name="GameRoot" type="Spatial"]
+script = ExtResource( 1 )
