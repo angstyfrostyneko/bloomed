@@ -1,9 +1,0 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=2]
-
-[ext_resource path="res://Assets/Materials/RiverShaderMaterial.tres" type="Shader" id=1]
-[ext_resource path="res://Assets/Textures/normal.jpg" type="Texture" id=2]
-
-[resource]
-render_priority = -1
-shader = ExtResource( 1 )
-shader_param/normal_texture = ExtResource( 2 )
