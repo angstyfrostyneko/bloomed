@@ -12,6 +12,8 @@ const PLAYER_NAME_FIELD := 'name'
 var username: String
 
 const INTERP_INTERVAL := 3
+const TICKS_PER_SECOND := 60
+const TICK_DELTA := 1.0/TICKS_PER_SECOND
 
 signal auth_finished
 signal server_closed
@@ -20,7 +22,7 @@ signal server_closed
 func _ready():
 	NetEncoding.init_headers()
 	reset_network()
-# warning-ignore:return_value_discarded
+	# warning-ignore:return_value_discarded
 	get_tree().connect('server_disconnected', self, 'on_server_disconnected')
 
 func reset_network():
@@ -117,11 +119,9 @@ func can_login(playerId: int, playerName: String) -> bool:
 
 func sync_new_player(playerData):
 	# Send new player to everyone else
+	self.on_player_connected(playerData)
 	for pid in self.players:
-		if pid == get_tree().get_network_unique_id():
-			self.on_player_connected(playerData)
-		else:
-			rpc_id(pid, 'on_player_connected', playerData)
+		rpc_id(pid, 'on_player_connected', playerData)
 		rpc_id(playerData[PLAYER_ID_FIELD], 'on_player_connected', self.players[pid])
 	
 	rpc_id(playerData[PLAYER_ID_FIELD], 'on_player_connected', playerData)

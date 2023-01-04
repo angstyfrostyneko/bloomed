@@ -36,6 +36,22 @@ mesh = SubResource( 2 )
 [node name="Collider" parent="." index="1"]
 shape = SubResource( 3 )
 
+[node name="Camera" type="Camera" parent="Head" index="1"]
+near = 0.01
+far = 256.0
+
+[node name="BackUpAimPoint" type="Position3D" parent="Head/Camera" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100 )
+
+[node name="AimCast" type="RayCast" parent="Head/Camera" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38419e-07, -0.551811 )
+enabled = true
+cast_to = Vector3( 0, -1, -1000 )
+collide_with_areas = true
+
+[node name="GunPosition" type="Spatial" parent="Head/Camera" index="2"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.244025, -0.261438, -0.521037 )
+
 [node name="HUD" type="CanvasLayer" parent="." index="5"]
 
 [node name="Health" type="RichTextLabel" parent="HUD" index="0"]
