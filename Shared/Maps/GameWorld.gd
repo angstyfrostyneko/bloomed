@@ -6,6 +6,7 @@ var PLAYER_CHARACTER_SCENE: PackedScene
 var tick_clock := 0
 
 var player_container: Node
+var item_container: Node
 
 enum SYNC_STATUS {
 	NONE,
@@ -30,6 +31,13 @@ func _physics_process(delta):
 	self.tick_clock += 1
 
 func load_map():
+	"""
+	Spawn items, load colliders, etc
+	"""
+	item_container = Node.new()
+	item_container.set_name('Items')
+	self.add_child(item_container)
+	
 	var map = preload('res://Shared/Maps/FirstArea.tscn').instance()
 	self.add_child(map)
 
@@ -56,6 +64,11 @@ func spawn_player(playerData):
 	newPlayer.transform.origin = $World/SpawnPoint.translation
 	
 	player_container.add_child(newPlayer)
+	
+func spawn_item(item: Item):
+	if item.get_parent() != null:
+		item.get_parent().remove_child(item)
+	item_container.add_child(item)
 	
 
 func on_player_disconnected(id):

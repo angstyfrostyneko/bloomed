@@ -5,11 +5,18 @@ onready var collider: CollisionShape = $Collider
 enum Type {GUN, BANDAGE, MAG}
 enum Class {PISTOL, RIFLE, SHOTGUN}
 
+var id: int = -1
+
 var is_held: bool = false
 var is_big: bool = false
 
 func _ready():
 	rset_config('transform', 1)
+
+func spawn(tree: SceneTree):
+	self.id = get_instance_id()
+	self.name = str(self.id)
+	tree.get_root().get_node("/root/GameRoot").spawn_item(self)
 
 func _physics_process(_delta):
 	if not self.is_network_master():

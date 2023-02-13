@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://Shared/Network/Graphics/ClientMeshInstance.gd"
 }, {
 "base": "Spatial",
+"class": "EntitySpawner",
+"language": "GDScript",
+"path": "res://Shared/Entities/EntitySpawner.gd"
+}, {
+"base": "Spatial",
 "class": "GameWorld",
 "language": "GDScript",
 "path": "res://Shared/Maps/GameWorld.gd"
@@ -56,6 +61,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "ClientMeshInstance": "",
+"EntitySpawner": "",
 "GameWorld": "",
 "Item": "",
 "NetEncoding": "",
