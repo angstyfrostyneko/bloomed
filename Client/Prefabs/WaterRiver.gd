@@ -1,11 +1,11 @@
-tool
-extends MeshInstance
+@tool
+extends MeshInstance3D
 
-export var width := 1
-export var length := 1
+@export var width := 1
+@export var length := 1
 
 # Resolution is length of quad
-export var resolution := 0.5
+@export var resolution := 0.5
 
 
 # Declare member variables here. Examples:

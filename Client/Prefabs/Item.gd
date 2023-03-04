@@ -1,7 +1,7 @@
-extends RigidBody
+extends RigidBody3D
 class_name Item
 
-onready var collider: CollisionShape = $Collider
+@onready var collider: CollisionShape3D = $Collider
 enum Type {GUN, BANDAGE, MAG}
 enum Class {PISTOL, RIFLE, SHOTGUN}
 
@@ -19,7 +19,7 @@ func spawn(tree: SceneTree):
 	tree.get_root().get_node("/root/GameRoot").spawn_item(self)
 
 func _physics_process(_delta):
-	if not self.is_network_master():
+	if not self.is_multiplayer_authority():
 		return
 	if not is_held:
 		if not self.sleeping:
@@ -28,7 +28,7 @@ func _physics_process(_delta):
 func on_pickup():
 	self.is_held = true
 	self.collider.disabled = true
-	self.mode = MODE_STATIC
+	self.mode = FREEZE_MODE_STATIC
 
 func on_drop():
 	self.is_held = false

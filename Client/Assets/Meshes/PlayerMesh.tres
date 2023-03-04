@@ -1,12 +1,10 @@
-[gd_resource type="CapsuleMesh" load_steps=2 format=2]
+[gd_resource type="CapsuleMesh" load_steps=2 format=3 uid="uid://bxedau3wh8xoo"]
 
-[sub_resource type="SpatialMaterial" id=1]
-albedo_color = Color( 1, 0.054902, 0.054902, 1 )
+[sub_resource type="StandardMaterial3D" id="1"]
+albedo_color = Color(1, 0.054902, 0.054902, 1)
 
 [resource]
 resource_local_to_scene = true
-material = SubResource( 1 )
-radius = 0.5
-mid_height = 1.25
+material = SubResource("1")
 radial_segments = 32
 rings = 4

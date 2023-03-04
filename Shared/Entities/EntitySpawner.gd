@@ -1,16 +1,16 @@
-tool
-extends Spatial
+@tool
+extends Node3D
 class_name EntitySpawner
 
-export var entity: PackedScene = null setget set_entity
-export var entity_name: String = "SpawnedEntity"
+@export var entity: PackedScene = null : set = set_entity
+@export var entity_name: String = "SpawnedEntity"
 
 # Store the InstanceMesh node here
-var _scene: Spatial = null
+var _scene: Node3D = null
 
 func _ready() -> void:
 	if (Engine.is_editor_hint() or NetworkManager.is_server):
-		_scene = entity.instance()
+		_scene = entity.instantiate()
 		_scene.set_name(entity_name)
 		if !Engine.is_editor_hint() and NetworkManager.is_server:
 			_scene.spawn(get_tree())

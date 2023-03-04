@@ -1,4 +1,4 @@
-extends KinematicBody
+extends CharacterBody3D
 class_name Player
 
 const CROUCHING_SPEED := 1
@@ -16,14 +16,14 @@ const THROW_STRENGTH := 35
 const MAX_THROW_CHARGE := 1.0
 const HAND = 0
 
-export var camera_sensitivity: float = 0.05
-export var speed: float = WALKING_SPEED
-export var acceleration: float = 6.0
-export var jump_impulse: float = 4.0
+@export var camera_sensitivity: float = 0.05
+@export var speed: float = WALKING_SPEED
+@export var acceleration: float = 6.0
+@export var jump_impulse: float = 4.0
 var velocity: Vector3 = Vector3.ZERO
 
-onready var world: Spatial = get_node("/root/GameRoot/World")
-onready var aimcast: RayCast = $Head/Camera/AimCast
+@onready var world: Node3D = get_node("/root/GameRoot/World")
+@onready var aimcast: RayCast3D = $Head/Camera3D/AimCast
 
 var health = 100
 var money = 250
@@ -47,7 +47,7 @@ func _ready():
 	modify_money(0)
 
 func _process(delta):
-	if not is_network_master():
+	if not is_multiplayer_authority():
 		return
 	if not handles_input:
 		return
@@ -113,7 +113,7 @@ func pick_and_drop(delta):
 func modify_money(amount):
 	money += amount
 	if not NetworkManager.is_server: # TODO: ugly af
-		$HUD/Money.bbcode_text = "[color=#00FF00]$[/color]%s" % str(money)
+		$HUD/Money.text = "[color=#00FF00]$[/color]%s" % str(money)
 
 func update_ammo_counter(magazine):
 	var reserve = 0
@@ -133,7 +133,7 @@ func update_ammo_counter(magazine):
 	if reserve < 30:
 		reserve_color = "#FF0000"
 	if not NetworkManager.is_server: # TODO: ugly af
-		$HUD/Ammo.bbcode_text = "[color=%s]%s[/color]/[color=%s]%s" % [magazine_color, magazine, reserve_color, reserve]
+		$HUD/Ammo.text = "[color=%s]%s[/color]/[color=%s]%s" % [magazine_color, magazine, reserve_color, reserve]
 
 func swap_item(slot):
 	if inventory[slot] == null and inventory[HAND] == null:
@@ -180,7 +180,7 @@ func reload():
 		
 		reloading = true
 		inventory[HAND].reload_timer.start()
-		yield(inventory[HAND].reload_timer, "timeout")
+		await inventory[HAND].reload_timer.timeout
 		if reloading == false:
 			return
 		inventory[HAND].magazine = inventory[i].size
@@ -189,24 +189,24 @@ func reload():
 		update_ammo_counter(inventory[HAND].magazine)
 		return
 
-remotesync func damage(amount):
+@rpc("any_peer", "call_local") func damage(amount):
 	health -= amount
 	emit_signal('health_changed', health)
 	if health <= 0:
 		# TODO: implement death
 		print("i am ded")
 
-remotesync func remote_crouch(crouched):
+@rpc("any_peer", "call_local") func remote_crouch(crouched):
 	if crouched:
-		$Body.mesh.set("mid_height", STANDING_HEIGHT[0])
+		$Body.mesh.set("height", STANDING_HEIGHT[0])
 		$Collider.shape.set("height", STANDING_HEIGHT[1])
 		self.speed = WALKING_SPEED
 	else:
-		$Body.mesh.set("mid_height", CROUCHING_HEIGHT[0])
+		$Body.mesh.set("height", CROUCHING_HEIGHT[0])
 		$Collider.shape.set("height", CROUCHING_HEIGHT[1])
 		self.speed = CROUCHING_SPEED
 
-remotesync func remote_run(ran): #I have NO idea what to name this var
+@rpc("any_peer", "call_local") func remote_run(ran): #I have NO idea what to name this var
 	self.speed = WALKING_SPEED if ran else RUNNING_SPEED
 
 func pickup(item: Item):
@@ -215,7 +215,7 @@ func pickup(item: Item):
 	if inventory[HAND] != null:
 		return
 
-	var target = get_node("Head/Camera/GunPosition")
+	var target = get_node("Head/Camera3D/GunPosition")
 	rpc("remote_pickup", target.get_path(), item.get_path())
 	inventory[HAND] = item
 	if item.type == Item.Type.GUN:
@@ -224,13 +224,13 @@ func pickup(item: Item):
 		update_ammo_counter(item.magazine)
 	item.is_held = true
 
-remotesync func remote_pickup(target_path, item_path):
+@rpc("any_peer", "call_local") func remote_pickup(target_path, item_path):
 	var target = get_node(target_path)
 	var item = get_node(item_path)
 	item.get_parent().remove_child(item)
 	target.add_child(item)
 	item.set_owner(target)
-	item.translation = Vector3(0, 0, 0)
+	item.position = Vector3(0, 0, 0)
 	item.rotation = Vector3(0, 0, 0)
 	
 	item.on_pickup()
@@ -242,13 +242,13 @@ func drop(item: Item):
 	if not NetworkManager.is_server: # TODO: ugly af
 		$HUD/Ammo.visible = false
 
-remotesync func remote_drop(item_path, strength: float):
+@rpc("any_peer", "call_local") func remote_drop(item_path, strength: float):
 	var item = get_node(item_path) as Item
 	item.on_drop()
 	item.get_parent().remove_child(item)
 	world.add_child(item)
 	item.set_owner(world)
-	item.translation = $Head.global_translation + Vector3(0,-0.125,0)
+	item.position = $Head.global_translation + Vector3(0,-0.125,0)
 	item.on_drop()
 	print(strength)
 	item.apply_central_impulse(-(5 + THROW_STRENGTH * strength) * $Head.global_transform.basis.z)

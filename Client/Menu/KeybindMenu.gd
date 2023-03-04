@@ -1,10 +1,10 @@
 extends PopupPanel
 
-onready var ActionName := $ActionName
-onready var ActionButton := $ActionButton
-onready var Popup := $PopupPanel
-onready var PopupLabel := $PopupPanel/Label
-onready var Grid := $ScrollContainer/VBoxContainer/GridContainer
+@onready var ActionName := $ActionName
+@onready var ActionButton := $ActionButton
+@onready var Popup := $PopupPanel
+@onready var PopupLabel := $PopupPanel/Label
+@onready var Grid := $ScrollContainer/VBoxContainer/GridContainer
 
 var current_label := ActionName
 var current_button := ActionButton
@@ -12,7 +12,7 @@ var current_button := ActionButton
 
 func _ready():
 	for action_name in InputMap.get_actions():
-		var key_name: InputEvent = InputMap.get_action_list(action_name)[0]
+		var key_name: InputEvent = InputMap.action_get_events(action_name)[0]
 		
 		var label: Label = ActionName.duplicate()
 		var button: Button = ActionButton.duplicate()
@@ -23,7 +23,7 @@ func _ready():
 		button.visible = true
 		button.text = key_name.as_text()
 		# warning-ignore:return_value_discarded
-		button.connect("button_down", self, "on_button_clicked", [label, button])
+		button.connect("button_down",Callable(self,"on_button_clicked").bind(label, button))
 		
 		Grid.add_child(label, true)
 		Grid.add_child(button, true)

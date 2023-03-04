@@ -2,13 +2,13 @@
 
 [ext_resource path="res://Client/Prefabs/Mag.gd" type="Script" id=1]
 
-[sub_resource type="ConvexPolygonShape" id=1]
-points = PoolVector3Array( 0.1, 0.1, 0.3, 0.1, 0.1, -0.3, -0.1, 0.1, 0.3, -0.1, 0.1, -0.3, 0.1, -0.1, 0.3, 0.1, -0.1, -0.3, -0.1, -0.1, 0.3, -0.1, -0.1, -0.3 )
+[sub_resource type="ConvexPolygonShape3D" id=1]
+points = PackedVector3Array( 0.1, 0.1, 0.3, 0.1, 0.1, -0.3, -0.1, 0.1, 0.3, -0.1, 0.1, -0.3, 0.1, -0.1, 0.3, 0.1, -0.1, -0.3, -0.1, -0.1, 0.3, -0.1, -0.1, -0.3 )
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="StandardMaterial3D" id=2]
 albedo_color = Color( 0, 0.835294, 1, 1 )
 
-[node name="PistolMag" type="RigidBody"]
+[node name="PistolMag" type="RigidBody3D"]
 collision_layer = 4
 collision_mask = 5
 mass = 4.0
@@ -16,14 +16,14 @@ script = ExtResource( 1 )
 weapon_class = 0
 size = 12
 
-[node name="PickupDetection" type="Area" parent="."]
+[node name="PickupDetection" type="Area3D" parent="."]
 monitoring = false
 monitorable = false
 
-[node name="Shape" type="CollisionShape" parent="PickupDetection"]
+[node name="Shape3D" type="CollisionShape3D" parent="PickupDetection"]
 shape = SubResource( 1 )
 
-[node name="Model" type="CSGBox" parent="."]
+[node name="Model" type="CSGBox3D" parent="."]
 width = 0.2
 height = 0.2
 depth = 0.6
@@ -37,5 +37,5 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
-[node name="Collider" type="CollisionShape" parent="."]
+[node name="Collider" type="CollisionShape3D" parent="."]
 shape = SubResource( 1 )

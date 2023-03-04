@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 class_name GameWorld
 
 var PLAYER_CHARACTER_SCENE: PackedScene
@@ -21,9 +21,9 @@ func _ready():
 	self.load_map()
 	
 	# warning-ignore:return_value_discarded
-	NetworkManager.connect('player_connected', self, 'spawn_player')
+	NetworkManager.connect('player_connected',Callable(self,'spawn_player'))
 	# warning-ignore:return_value_discarded
-	NetworkManager.connect('player_disconnected', self, 'on_player_disconnected')
+	NetworkManager.connect('player_disconnected',Callable(self,'on_player_disconnected'))
 	
 	self.setup()
 
@@ -38,7 +38,7 @@ func load_map():
 	item_container.set_name('Items')
 	self.add_child(item_container)
 	
-	var map = preload('res://Shared/Maps/FirstArea.tscn').instance()
+	var map = preload('res://Shared/Maps/FirstArea.tscn').instantiate()
 	self.add_child(map)
 
 func setup():
@@ -57,11 +57,11 @@ func spawn_player(playerData):
 	
 	print("Spawning playerId %d" % playerId)
 	
-	var newPlayer = PLAYER_CHARACTER_SCENE.instance()
-	newPlayer.set_network_master(playerId)
+	var newPlayer = PLAYER_CHARACTER_SCENE.instantiate()
+	newPlayer.set_multiplayer_authority(playerId)
 	newPlayer.set_name(str(playerId))
 	newPlayer.set_display_name(playerData[NetworkManager.PLAYER_NAME_FIELD])
-	newPlayer.transform.origin = $World/SpawnPoint.translation
+	newPlayer.transform.origin = $World/SpawnPoint.position
 	
 	player_container.add_child(newPlayer)
 	

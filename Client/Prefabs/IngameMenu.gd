@@ -8,7 +8,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if not is_network_master():
+	if not is_multiplayer_authority():
 		return
 	
 	if Input.is_action_just_pressed("open_menu"):
@@ -27,7 +27,7 @@ func hide():
 
 func _on_LeaveButton_pressed():
 	NetworkManager.reset_network()
-	get_tree().change_scene('res://Menu/ConnectMenu.tscn')
+	get_tree().change_scene_to_file('res://Menu/ConnectMenu.tscn')
 
 
 func _on_CloseButton_pressed():

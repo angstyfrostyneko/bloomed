@@ -1,14 +1,14 @@
 extends Control
 
-onready var KeybindMenu: PopupPanel  = $KeybindMenu
+@onready var KeybindMenu: PopupPanel  = $KeybindMenu
 
 var connecting = false
 
 func _ready():
 # warning-ignore:return_value_discarded
-	NetworkManager.connect('auth_finished', self, 'on_auth_finished')
+	NetworkManager.connect('auth_finished',Callable(self,'on_auth_finished'))
 # warning-ignore:return_value_discarded
-	get_tree().connect('connection_failed', self, 'on_connection_failed')
+	get_tree().connect('connection_failed',Callable(self,'on_connection_failed'))
 
 func _on_ConnectButton_pressed():
 	if connecting:
@@ -26,7 +26,7 @@ func _on_ConnectButton_pressed():
 
 func on_auth_finished():
 # warning-ignore:return_value_discarded
-	get_tree().change_scene('res://Client/ClientMain.tscn')
+	get_tree().change_scene_to_file('res://Client/ClientMain.tscn')
 
 func on_connection_failed():
 	self.connecting = false

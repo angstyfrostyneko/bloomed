@@ -8,6 +8,6 @@ func _init():
 func _ready():
 	pass
 	
-remote func request_first_sync():
-	var sender := get_tree().get_rpc_sender_id()
+@rpc("any_peer") func request_first_sync():
+	var sender := get_tree().get_remote_sender_id()
 	rpc_id(sender, 'sync_clock', self.tick_clock)

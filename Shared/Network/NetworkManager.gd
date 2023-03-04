@@ -23,7 +23,7 @@ func _ready():
 	NetEncoding.init_headers()
 	reset_network()
 	# warning-ignore:return_value_discarded
-	get_tree().connect('server_disconnected', self, 'on_server_disconnected')
+	get_tree().connect('server_disconnected',Callable(self,'on_server_disconnected'))
 
 func reset_network():
 	var peer = get_tree().network_peer
@@ -48,15 +48,15 @@ func start_hosting(port):
 	self.is_server = true
 	reset_network()
 	
-	var peer = NetworkedMultiplayerENet.new()
+	var peer = ENetMultiplayerPeer.new()
 	var result = peer.create_server(port, MAX_PLAYERS)
 	if result == OK:
-		get_tree().set_network_peer(peer)
+		get_tree().set_multiplayer_peer(peer)
 		
 		# warning-ignore:return_value_discarded
-		get_tree().connect('network_peer_connected', self, 'on_peer_connected')
+		get_tree().connect('peer_connected',Callable(self,'on_peer_connected'))
 		# warning-ignore:return_value_discarded
-		get_tree().connect('network_peer_disconnected', self, 'on_peer_disconnected')
+		get_tree().connect('peer_disconnected',Callable(self,'on_peer_disconnected'))
 		print('Server started.')
 		
 		emit_signal('auth_finished')
@@ -69,37 +69,37 @@ func join_game(accountInfo, serverIp: String, port: int):
 	self.is_server = false
 	self.reset_network()
 	# warning-ignore:return_value_discarded
-	get_tree().connect('connected_to_server', self, 'on_connected_to_server')
+	get_tree().connect('connected_to_server',Callable(self,'on_connected_to_server'))
 	
 	self.username = accountInfo[PLAYER_NAME_FIELD]
 	
-	var peer = NetworkedMultiplayerENet.new()
+	var peer = ENetMultiplayerPeer.new()
 	var result = peer.create_client(serverIp, port)
 	
 	if result == OK:
-		get_tree().set_network_peer(peer)
+		get_tree().set_multiplayer_peer(peer)
 		print('Connecting to server...')
-		return yield(self, 'auth_finished')
+		return await self.auth_finished
 	else:
 		return false
 
 func on_connected_to_server():
 	print('Connected to server, authenticating')
-	rpc_id(SERVER_ID, 'auth_request', get_tree().get_network_unique_id(), self.username)
+	rpc_id(SERVER_ID, 'auth_request', get_tree().get_unique_id(), self.username)
 # warning-ignore:unused_variable
-	var auth_answer = yield(self, 'auth_response')
+	var auth_answer = await self.auth_response
 
 signal player_connected(playerData)
 signal player_disconnected(id)
 
-remote func on_player_connected(playerData):
+@rpc("any_peer") func on_player_connected(playerData):
 	self.players[playerData[PLAYER_ID_FIELD]] = playerData
 	
 	emit_signal('player_connected', playerData)
 	
 	print('Total players: %d' % self.players.size())
 
-remote func on_player_disconnected(id):
+@rpc("any_peer") func on_player_disconnected(id):
 	if not (id in players):
 		return
 	print('%s disconnected.' % players[id][PLAYER_NAME_FIELD])
@@ -126,7 +126,7 @@ func sync_new_player(playerData):
 	
 	rpc_id(playerData[PLAYER_ID_FIELD], 'on_player_connected', playerData)
 
-remote func auth_request(playerId: int, playerName: String):
+@rpc("any_peer") func auth_request(playerId: int, playerName: String):
 	print('Auth request from %d: %s' % [playerId, playerName])
 	if not can_login(playerId, playerName):
 		rpc_id(playerId, 'answer_auth', false, 'Account already connected')
@@ -143,11 +143,11 @@ remote func auth_request(playerId: int, playerName: String):
 # Client Side
 signal auth_response(accepted, answer)
 
-remote func answer_auth(accepted, answer):
+@rpc("any_peer") func answer_auth(accepted, answer):
 	print('Authentication answered: %s' % answer)
 	emit_signal('auth_response', accepted, answer)
 	
-remote func finish_auth():
+@rpc("any_peer") func finish_auth():
 	emit_signal('auth_finished')
 
 func is_host():

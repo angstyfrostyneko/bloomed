@@ -9,7 +9,7 @@ func _init():
 
 func _ready():
 	# warning-ignore:return_value_discarded
-	NetworkManager.connect('server_closed', self, 'on_server_closed')
+	NetworkManager.connect('server_closed',Callable(self,'on_server_closed'))
 	
 	self.first_sync()
 
@@ -22,4 +22,4 @@ func first_sync():
 
 func on_server_closed():
 	# warning-ignore:return_value_discarded
-	get_tree().change_scene('res://Client/Menu/ConnectMenu.tscn')
+	get_tree().change_scene_to_file('res://Client/Menu/ConnectMenu.tscn')
