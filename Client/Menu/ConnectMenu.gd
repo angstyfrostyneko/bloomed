@@ -8,7 +8,7 @@ func _ready():
 # warning-ignore:return_value_discarded
 	NetworkManager.connect('auth_finished',Callable(self,'on_auth_finished'))
 # warning-ignore:return_value_discarded
-	get_tree().connect('connection_failed',Callable(self,'on_connection_failed'))
+	multiplayer.connect('connection_failed',Callable(self,'on_connection_failed'))
 
 func _on_ConnectButton_pressed():
 	if connecting:
@@ -22,7 +22,7 @@ func _on_ConnectButton_pressed():
 	self.connecting = true
 	$Panel/VBoxContainer/Status.set_text('Connecting...')
 	
-	yield (NetworkManager.join_game({NetworkManager.PLAYER_NAME_FIELD: playerName}, ip, port), 'completed')
+	await NetworkManager.join_game({NetworkManager.PLAYER_NAME_FIELD: playerName}, ip, port)
 
 func on_auth_finished():
 # warning-ignore:return_value_discarded

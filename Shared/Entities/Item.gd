@@ -11,7 +11,7 @@ var is_held: bool = false
 var is_big: bool = false
 
 func _ready():
-	rset_config('transform', 1)
+	pass
 
 func spawn(tree: SceneTree):
 	self.id = get_instance_id()
@@ -23,14 +23,18 @@ func _physics_process(_delta):
 		return
 	if not is_held:
 		if not self.sleeping:
-			rset_unreliable('transform', self.transform)
+			rpc('sync_state', self.transform)
 
+@rpc("unreliable", "any_peer")
+func sync_state(transform: Transform3D):
+	self.transform = transform
+	
 func on_pickup():
 	self.is_held = true
 	self.collider.disabled = true
-	self.mode = FREEZE_MODE_STATIC
+	self.freeze = true
 
 func on_drop():
 	self.is_held = false
 	self.collider.disabled = false
-	self.mode = MODE_RIGID
+	self.freeze = false

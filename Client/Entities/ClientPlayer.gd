@@ -7,7 +7,7 @@ var current_snapshot: PlayerSnapshot = null
 var target_snapshot: PlayerSnapshot = null
 
 func _ready():
-	if int(self.name) == get_tree().get_unique_id():
+	if self.name.to_int() == multiplayer.get_unique_id():
 		self.set_main()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -42,6 +42,9 @@ func _physics_process(delta):
 	snapshot.head_angle = $Head.rotation.x
 	rpc_id(NetworkManager.SERVER_ID, 'server_get_player_snapshot', snapshot.encode())
 
+
+@rpc("any_peer") func server_get_player_snapshot(snapshot_data: PackedByteArray):
+	print('This should not be executed!!')
 
 
 func _process(delta):
@@ -113,6 +116,7 @@ func _get_movement_direction(delta):
 	if stamina <= 0:
 		running = false
 		#rpc("remote_run", false)
+
 	return direction
 
 @rpc("any_peer") func client_get_player_snapshot(snapshot_data):

@@ -8,6 +8,7 @@ func _init():
 	self.PLAYER_CHARACTER_SCENE = CLIENT_PLAYER_SCENE
 
 func _ready():
+	super()
 	# warning-ignore:return_value_discarded
 	NetworkManager.connect('server_closed',Callable(self,'on_server_closed'))
 	
@@ -17,8 +18,8 @@ func _physics_process(delta):
 	pass
 
 func first_sync():
-	rpc_id(NetworkManager.SERVER_ID, 'request_first_sync')
-
+	pass
+	#rpc_id(NetworkManager.SERVER_ID, 'request_first_sync')
 
 func on_server_closed():
 	# warning-ignore:return_value_discarded

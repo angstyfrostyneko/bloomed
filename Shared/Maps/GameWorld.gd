@@ -21,9 +21,9 @@ func _ready():
 	self.load_map()
 	
 	# warning-ignore:return_value_discarded
-	NetworkManager.connect('player_connected',Callable(self,'spawn_player'))
+	NetworkManager.connect('player_connected', func(data) : self.spawn_player(data))
 	# warning-ignore:return_value_discarded
-	NetworkManager.connect('player_disconnected',Callable(self,'on_player_disconnected'))
+	NetworkManager.connect('player_disconnected', func(id) : self.on_player_disconnected(id))
 	
 	self.setup()
 

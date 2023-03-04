@@ -7,8 +7,7 @@ func push_snapshot(snapshot: TimestampedData):
 	if snapshots.size() == 0:
 		snapshots.append(snapshot)
 	else:
-		var index = snapshots.bsearch_custom(snapshot,
-			TimestampedData, 'earlier_than')
+		var index = snapshots.bsearch_custom(snapshot, func(x,y): TimestampedData.earlier_than(x,y))
 		if snapshots[index].tick == snapshot.tick:
 			snapshots[index] = snapshot
 		else:

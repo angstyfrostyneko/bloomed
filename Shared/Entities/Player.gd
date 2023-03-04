@@ -20,7 +20,6 @@ const HAND = 0
 @export var speed: float = WALKING_SPEED
 @export var acceleration: float = 6.0
 @export var jump_impulse: float = 4.0
-var velocity: Vector3 = Vector3.ZERO
 
 @onready var world: Node3D = get_node("/root/GameRoot/World")
 @onready var aimcast: RayCast3D = $Head/Camera3D/AimCast

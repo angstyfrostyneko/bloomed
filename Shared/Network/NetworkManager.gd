@@ -20,15 +20,14 @@ signal server_closed
 
 
 func _ready():
-	NetEncoding.init_headers()
 	reset_network()
 	# warning-ignore:return_value_discarded
-	get_tree().connect('server_disconnected',Callable(self,'on_server_disconnected'))
+	multiplayer.connect('server_disconnected',Callable(self,'on_server_disconnected'))
 
 func reset_network():
-	var peer = get_tree().network_peer
+	var peer = multiplayer.multiplayer_peer
 	if peer != null:
-		peer.close_connection()
+		peer.close()
 	
 	# Cleanup all state related to the game session
 	self.players = {}
@@ -51,12 +50,12 @@ func start_hosting(port):
 	var peer = ENetMultiplayerPeer.new()
 	var result = peer.create_server(port, MAX_PLAYERS)
 	if result == OK:
-		get_tree().set_multiplayer_peer(peer)
+		multiplayer.multiplayer_peer = peer
 		
 		# warning-ignore:return_value_discarded
-		get_tree().connect('peer_connected',Callable(self,'on_peer_connected'))
+		multiplayer.connect('peer_connected',Callable(self,'on_peer_connected'))
 		# warning-ignore:return_value_discarded
-		get_tree().connect('peer_disconnected',Callable(self,'on_peer_disconnected'))
+		multiplayer.connect('peer_disconnected',Callable(self,'on_peer_disconnected'))
 		print('Server started.')
 		
 		emit_signal('auth_finished')
@@ -69,7 +68,7 @@ func join_game(accountInfo, serverIp: String, port: int):
 	self.is_server = false
 	self.reset_network()
 	# warning-ignore:return_value_discarded
-	get_tree().connect('connected_to_server',Callable(self,'on_connected_to_server'))
+	multiplayer.connect('connected_to_server',Callable(self,'on_connected_to_server'))
 	
 	self.username = accountInfo[PLAYER_NAME_FIELD]
 	
@@ -77,7 +76,7 @@ func join_game(accountInfo, serverIp: String, port: int):
 	var result = peer.create_client(serverIp, port)
 	
 	if result == OK:
-		get_tree().set_multiplayer_peer(peer)
+		multiplayer.multiplayer_peer = peer
 		print('Connecting to server...')
 		return await self.auth_finished
 	else:
@@ -85,7 +84,7 @@ func join_game(accountInfo, serverIp: String, port: int):
 
 func on_connected_to_server():
 	print('Connected to server, authenticating')
-	rpc_id(SERVER_ID, 'auth_request', get_tree().get_unique_id(), self.username)
+	rpc_id(SERVER_ID, 'auth_request', multiplayer.get_unique_id(), self.username)
 # warning-ignore:unused_variable
 	var auth_answer = await self.auth_response
 
@@ -151,4 +150,4 @@ signal auth_response(accepted, answer)
 	emit_signal('auth_finished')
 
 func is_host():
-  return self.is_server
+	return self.is_server

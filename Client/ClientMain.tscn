@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://cgc8jpi6cy7sp"]
 
-[ext_resource path="res://Client/ClientMain.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://Client/ClientMain.gd" id="1"]
 
 [node name="GameRoot" type="Node3D"]
-script = ExtResource( 1 )
+script = ExtResource("1")

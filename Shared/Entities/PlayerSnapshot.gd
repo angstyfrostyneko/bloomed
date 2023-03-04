@@ -8,17 +8,21 @@ var head_angle: float
 # Based on http://www.kehomsforge.com/tutorials/multi/gdMoreNetworking/part03
 func encode():
 	var encoded = PackedByteArray()
-	
-	encoded.append_array(NetEncoding.encode_4bytes(tick))
-	encoded.append_array(NetEncoding.encode_12bytes(player_position))
-	encoded.append_array(NetEncoding.encode_4bytes(player_angle))
-	encoded.append_array(NetEncoding.encode_4bytes(head_angle))
+	encoded.resize(24)
+	encoded.encode_u32(0, tick)
+	encoded.encode_float(4, player_position.x)
+	encoded.encode_float(8, player_position.y)
+	encoded.encode_float(12, player_position.z)
+	encoded.encode_float(16, player_angle)
+	encoded.encode_float(20, head_angle)
 	
 	return encoded
 
 func decode(data: PackedByteArray):
-	self.tick = bytes_to_var(NetEncoding.HEADERS.int + data.subarray(0, 3))
-	self.player_position = bytes_to_var(NetEncoding.HEADERS.vec3 + data.subarray(4, 15))
-	self.player_angle = bytes_to_var(NetEncoding.HEADERS.float + data.subarray(16, 19))
-	self.head_angle = bytes_to_var(NetEncoding.HEADERS.float + data.subarray(20, 23))
+	self.tick = data.decode_u32(0)
+	self.player_position.x = data.decode_float(4)
+	self.player_position.y = data.decode_float(8)
+	self.player_position.z = data.decode_float(12)
+	self.player_angle = data.decode_float(16)
+	self.head_angle = data.decode_float(20)
 	return self

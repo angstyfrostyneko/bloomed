@@ -13,15 +13,15 @@ func _process(delta):
 	
 	if Input.is_action_just_pressed("open_menu"):
 		if self.visible:
-			hide()
+			_hide()
 		else:
-			show()
+			_show()
 
-func show():
+func _show():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	self.visible = true
 
-func hide():
+func _hide():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	self.visible = false
 
