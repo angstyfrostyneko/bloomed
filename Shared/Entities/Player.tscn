@@ -1,50 +1,49 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://gchitm42n36h"]
 
-[ext_resource path="res://Shared/Entities/Player.gd" type="Script" id=2]
-[ext_resource path="res://Shared/Network/Graphics/ClientMeshInstance.gd" type="Script" id=4]
-[ext_resource path="res://Client/Assets/Meshes/PlayerMesh.tres" type="CapsuleMesh" id=5]
+[ext_resource type="Script" path="res://Shared/Entities/Player.gd" id="2"]
+[ext_resource type="Script" path="res://Shared/Network/Graphics/ClientMeshInstance.gd" id="4"]
+[ext_resource type="Script" path="res://Shared/Entities/PlayerInput.gd" id="4_n4v0o"]
+[ext_resource type="CapsuleMesh" uid="uid://bxedau3wh8xoo" path="res://Client/Assets/Meshes/PlayerMesh.tres" id="5"]
 
-[sub_resource type="CylinderShape3D" id=8]
+[sub_resource type="CylinderShape3D" id="8"]
 resource_local_to_scene = true
 height = 2.25
-radius = 0.5
 
-[sub_resource type="SphereMesh" id=9]
+[sub_resource type="SphereMesh" id="9"]
 radius = 0.1
 height = 0.2
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 collision_layer = 2
 collision_mask = 3
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_horizontal_guides_": [  ]
-}
+script = ExtResource("2")
 
 [node name="Body" type="Node3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.125, 0 )
-script = ExtResource( 4 )
-mesh = ExtResource( 5 )
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.125, 0)
+script = ExtResource("4")
+mesh = ExtResource("5")
 
 [node name="Collider" type="CollisionShape3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0 )
-shape = SubResource( 8 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0)
+shape = SubResource("8")
 
 [node name="Head" type="Node3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.625, 0 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.625, 0)
 
 [node name="Hand" type="Node3D" parent="Head"]
-transform = Transform3D( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.3, -0.5, -0.5 )
-script = ExtResource( 4 )
-mesh = SubResource( 9 )
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.3, -0.5, -0.5)
+script = ExtResource("4")
+mesh = SubResource("9")
 
 [node name="FloorCheck" type="RayCast3D" parent="."]
-enabled = true
-target_position = Vector3( 0, -0.2, 0 )
+target_position = Vector3(0, -0.2, 0)
 
 [node name="NameTag" type="Label3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 pixel_size = 0.025
 billboard = 2
 alpha_cut = 1
 text = "Placeholder"
+
+[node name="PlayerInput" type="Node" parent="."]
+script = ExtResource("4_n4v0o")

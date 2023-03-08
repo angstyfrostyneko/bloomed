@@ -1,12 +1,38 @@
 extends Player
 class_name ServerPlayer
 
-@onready var game_root: GameWorld = get_node('/root/GameRoot')
+var latency : int = 0
+var is_pinging := false
 
 func _ready():
 	pass
 
-@rpc("any_peer") func server_get_player_snapshot(snapshot_data: PackedByteArray):
-	var snapshot = PlayerSnapshot.new().decode(snapshot_data)
-	snapshot.tick = game_root.tick_clock
-	rpc('client_get_player_snapshot', snapshot.encode())
+func _process(delta):
+	super(delta)
+
+func _physics_process(delta):
+	super(delta)
+
+@rpc("any_peer", "reliable")
+func server_gather_player_input(packed_input_message: PackedByteArray):
+	var input_message = PlayerInput.InputMessage.decode(packed_input_message)
+	if player_inputs.size() > 0:
+		if player_inputs[-1].tick == game_root.tick_clock:
+			return
+	player_input_queue.append(input_message)
+
+signal PongReceived
+
+func ping():
+	is_pinging = true
+	
+	var t0 = Time.get_ticks_msec()
+	
+	game_root.rpc_id(self.network_id, 'pong')
+	
+	await PongReceived
+	
+	latency = Time.get_ticks_msec() - t0
+	
+	game_root.rpc_id(self.network_id, 'pang', game_root.tick_clock)
+

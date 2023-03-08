@@ -58,8 +58,8 @@ func spawn_player(playerData):
 	print("Spawning playerId %d" % playerId)
 	
 	var newPlayer = PLAYER_CHARACTER_SCENE.instantiate()
-	newPlayer.set_multiplayer_authority(playerId)
-	newPlayer.set_name(str(playerId))
+	newPlayer.set_network_id(playerId)
+	newPlayer.set_multiplayer_authority(playerId, true)
 	newPlayer.set_display_name(playerData[NetworkManager.PLAYER_NAME_FIELD])
 	newPlayer.transform.origin = $World/SpawnPoint.position
 	

@@ -1,86 +1,71 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://dn8hvbja1x67h"]
 
-[ext_resource path="res://Shared/Entities/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Client/Entities/ClientPlayer.gd" type="Script" id=2]
-[ext_resource path="res://Client/Prefabs/IngameMenu.gd" type="Script" id=3]
-[ext_resource path="res://Client/Assets/Fonts/InterFontData.tres" type="FontFile" id=4]
+[ext_resource type="PackedScene" uid="uid://gchitm42n36h" path="res://Shared/Entities/Player.tscn" id="1"]
+[ext_resource type="Script" path="res://Client/Entities/ClientPlayer.gd" id="2"]
+[ext_resource type="Script" path="res://Client/Prefabs/IngameMenu.gd" id="3"]
 
-[sub_resource type="StandardMaterial3D" id=1]
-albedo_color = Color( 1, 0.054902, 0.054902, 1 )
+[sub_resource type="StandardMaterial3D" id="1"]
+albedo_color = Color(1, 0.054902, 0.054902, 1)
 
-[sub_resource type="CapsuleMesh" id=2]
+[sub_resource type="CapsuleMesh" id="2"]
 resource_local_to_scene = true
-material = SubResource( 1 )
-radius = 0.5
+material = SubResource("1")
 height = 1.25
 radial_segments = 32
 rings = 4
 
-[sub_resource type="CylinderShape3D" id=3]
+[sub_resource type="CylinderShape3D" id="3"]
 resource_local_to_scene = true
 height = 2.25
-radius = 0.5
 
-[sub_resource type="FontFile" id=4]
-size = 35
-outline_size = 2
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 4 )
-
-[node name="ClientPlayer" instance=ExtResource( 1 )]
-script = ExtResource( 2 )
+[node name="ClientPlayer" instance=ExtResource("1")]
+script = ExtResource("2")
 
 [node name="Body" parent="." index="0"]
-mesh = SubResource( 2 )
+mesh = SubResource("2")
 
 [node name="Collider" parent="." index="1"]
-shape = SubResource( 3 )
+shape = SubResource("3")
 
 [node name="Camera3D" type="Camera3D" parent="Head" index="1"]
 near = 0.01
 far = 256.0
 
 [node name="BackUpAimPoint" type="Marker3D" parent="Head/Camera3D" index="0"]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100)
 
 [node name="AimCast" type="RayCast3D" parent="Head/Camera3D" index="1"]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38419e-07, -0.551811 )
-enabled = true
-target_position = Vector3( 0, -1, -1000 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38419e-07, -0.551811)
+target_position = Vector3(0, -1, -1000)
 collide_with_areas = true
 
 [node name="GunPosition" type="Node3D" parent="Head/Camera3D" index="2"]
-transform = Transform3D( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.244025, -0.261438, -0.521037 )
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.244025, -0.261438, -0.521037)
 
 [node name="HUD" type="CanvasLayer" parent="." index="5"]
 
 [node name="Health" type="RichTextLabel" parent="HUD" index="0"]
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
 offset_top = -50.0
 offset_right = 99.0
-pivot_offset = Vector2( 113, 66 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_fonts/normal_font = SubResource( 4 )
+pivot_offset = Vector2(113, 66)
 bbcode_enabled = true
 text = "100"
-text = "100"
-fit_content_height = true
 
 [node name="Ammo" type="RichTextLabel" parent="HUD" index="1"]
 visible = false
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -137.0
 offset_top = -50.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_fonts/normal_font = SubResource( 4 )
 bbcode_enabled = true
 text = "30/300"
-fit_content_height = true
 
 [node name="Money" type="RichTextLabel" parent="HUD" index="2"]
 visible = false
@@ -88,14 +73,12 @@ offset_left = 10.0
 offset_top = 10.0
 offset_right = 167.0
 offset_bottom = 50.0
-pivot_offset = Vector2( 113, 66 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_fonts/normal_font = SubResource( 4 )
+pivot_offset = Vector2(113, 66)
 bbcode_enabled = true
 text = "$250"
-fit_content_height = true
 
 [node name="Crosshair" type="Label" parent="HUD" index="3"]
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -105,16 +88,19 @@ offset_top = -5.0
 offset_right = 15.0
 offset_bottom = 9.0
 text = "."
-align = 1
-valign = 1
 
 [node name="Menu" type="Control" parent="HUD" index="4"]
 visible = false
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 3 )
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/Menu" index="0"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -123,26 +109,18 @@ offset_left = -75.0
 offset_top = -137.5
 offset_right = 75.0
 offset_bottom = 137.5
-custom_constants/separation = 32
 
 [node name="Label" type="Label" parent="HUD/Menu/VBoxContainer" index="0"]
-offset_right = 150.0
-offset_bottom = 14.0
+layout_mode = 2
 text = "Menu"
-align = 1
 
 [node name="LeaveButton" type="Button" parent="HUD/Menu/VBoxContainer" index="1"]
-offset_top = 46.0
-offset_right = 150.0
-offset_bottom = 66.0
+layout_mode = 2
 text = "Leave"
 
 [node name="CloseButton" type="Button" parent="HUD/Menu/VBoxContainer" index="2"]
-offset_top = 98.0
-offset_right = 150.0
-offset_bottom = 118.0
+layout_mode = 2
 text = "Close Menu"
 
-[connection signal="health_changed" from="." to="." method="_on_health_changed"]
 [connection signal="pressed" from="HUD/Menu/VBoxContainer/LeaveButton" to="HUD/Menu" method="_on_LeaveButton_pressed"]
 [connection signal="pressed" from="HUD/Menu/VBoxContainer/CloseButton" to="HUD/Menu" method="_on_CloseButton_pressed"]

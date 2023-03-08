@@ -11,9 +11,11 @@ const PLAYER_NAME_FIELD := 'name'
 
 var username: String
 
-const INTERP_INTERVAL := 3
+const INTERP_DEAD_ZONE := 0
+const INTERP_INTERVAL := 30 + INTERP_DEAD_ZONE
 const TICKS_PER_SECOND := 60
 const TICK_DELTA := 1.0/TICKS_PER_SECOND
+const TICK_DELTA_MS := TICK_DELTA * 1000.0
 
 signal auth_finished
 signal server_closed

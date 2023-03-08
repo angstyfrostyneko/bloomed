@@ -4,3 +4,9 @@
 
 [node name="GameRoot" type="Node3D"]
 script = ExtResource("1")
+
+[node name="PingRequestTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[connection signal="timeout" from="PingRequestTimer" to="." method="_on_ping_request_timer_timeout"]

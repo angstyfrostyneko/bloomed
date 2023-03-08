@@ -18,11 +18,12 @@ func encode():
 	
 	return encoded
 
-func decode(data: PackedByteArray):
-	self.tick = data.decode_u32(0)
-	self.player_position.x = data.decode_float(4)
-	self.player_position.y = data.decode_float(8)
-	self.player_position.z = data.decode_float(12)
-	self.player_angle = data.decode_float(16)
-	self.head_angle = data.decode_float(20)
-	return self
+static func decode(data: PackedByteArray) -> PlayerSnapshot:
+	var result = PlayerSnapshot.new()
+	result.tick = data.decode_u32(0)
+	result.player_position.x = data.decode_float(4)
+	result.player_position.y = data.decode_float(8)
+	result.player_position.z = data.decode_float(12)
+	result.player_angle = data.decode_float(16)
+	result.head_angle = data.decode_float(20)
+	return result
