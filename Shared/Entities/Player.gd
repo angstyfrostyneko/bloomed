@@ -3,7 +3,7 @@ class_name Player
 
 const GRAVITY = -9.8
 
-@export var speed: float = 1.25
+@export var speed: float = 1.5
 @export var acceleration: float = 6.0
 @export var jump_impulse: float = 4.0
 
@@ -33,7 +33,7 @@ func _process(delta):
 		return
 	
 func _physics_process(delta):
-	if not NetworkManager.is_host(): # and not is_multiplayer_authority():
+	if not NetworkManager.is_host() and not is_multiplayer_authority(): # and not is_multiplayer_authority():
 		return
 	
 	var input_message := _get_network_player_input()
@@ -53,12 +53,13 @@ func _physics_process(delta):
 	set_velocity(velocity)
 	move_and_slide()
 	
-	var snapshot = PlayerSnapshot.new()
-	snapshot.tick = game_root.tick_clock
-	snapshot.player_position = self.transform.origin
-	snapshot.player_angle = self.rotation.y
-	snapshot.head_angle = $Head.rotation.x
-	rpc('client_get_player_snapshot', snapshot.encode())
+	if NetworkManager.is_host():
+		var snapshot = PlayerSnapshot.new()
+		snapshot.tick = game_root.tick_clock
+		snapshot.player_position = self.transform.origin
+		snapshot.player_angle = self.rotation.y
+		snapshot.head_angle = $Head.rotation.x
+		rpc('client_get_player_snapshot', snapshot.encode())
 
 func _get_network_player_input() -> PlayerInput.InputMessage:
 	var input_message: PlayerInput.InputMessage = last_player_input
@@ -70,7 +71,7 @@ func _get_network_player_input() -> PlayerInput.InputMessage:
 		last_player_input = input_message
 		player_inputs.append(input_message)
 	else:
-		if extrapolation_length >= EXTRAPOLATION_TIME:
+		if extrapolation_length >= EXTRAPOLATION_TIME or input_message == null:
 			input_message = PlayerInput.InputMessage.new()
 		extrapolation_length += 1
 	

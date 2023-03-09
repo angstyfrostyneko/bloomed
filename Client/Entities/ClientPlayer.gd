@@ -22,11 +22,15 @@ func _physics_process(delta):
 	if not is_multiplayer_authority():
 		_puppet_generate_movement()
 		return
-	else:
-		_puppet_generate_movement()
+	#else:
+	#	_puppet_generate_movement()
 	
 	var input_message = player_input.get_input_message()
 	input_message.tick = game_root.tick_clock
+	
+	# client-side prediction
+	player_input_queue.append(input_message)
+	
 	rpc_id(NetworkManager.SERVER_ID, 'server_gather_player_input', input_message.encode())
 
 var last_puppet_move := 0.0
@@ -76,9 +80,10 @@ func server_gather_player_input(packed_input_message: PackedByteArray):
 
 @rpc("any_peer", "unreliable_ordered")
 func client_get_player_snapshot(packed_snapshot: PackedByteArray):
-	#if is_multiplayer_authority():
-	#	return
 	var snapshot := PlayerSnapshot.decode(packed_snapshot)
+	if is_multiplayer_authority():
+		print('simulation delta: ', self.transform.origin - snapshot.player_position)
+		return
 	snapshot_container.push_snapshot(snapshot)
 	
 
