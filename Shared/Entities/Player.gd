@@ -12,10 +12,14 @@ const GRAVITY = -9.8
 @onready var player_input: PlayerInput = $PlayerInput
 @onready var aimcast: RayCast3D = $Head/Camera3D/AimCast
 
+const EXTRAPOLATION_TIME := 6
 var network_id := -1
 
 var player_inputs: Array[PlayerInput.InputMessage] = []
 var player_input_queue: Array[PlayerInput.InputMessage] = []
+var last_player_input: PlayerInput.InputMessage = null
+var extrapolation_length := 0
+
 
 func _ready():
 	pass
@@ -27,17 +31,12 @@ func set_network_id(id: int):
 func _process(delta):
 	if not is_multiplayer_authority():
 		return
-
+	
 func _physics_process(delta):
 	if not NetworkManager.is_host(): # and not is_multiplayer_authority():
 		return
 	
-	var input_message: PlayerInput.InputMessage = PlayerInput.InputMessage.new()
-	
-	if player_input_queue.size() != 0:
-		# TODO: This is exploitable, client can send a lot of inputs for one frame, be careful.
-		input_message = player_input_queue.pop_front()
-		player_inputs.append(input_message)
+	var input_message := _get_network_player_input()
 	
 	self.rotate_y(input_message.camera_delta.x)
 	$Head.rotate_x(input_message.camera_delta.y)
@@ -49,7 +48,7 @@ func _physics_process(delta):
 	velocity.x = lerp(velocity.x, direction.x * speed, acceleration * delta)
 	velocity.z = lerp(velocity.z, direction.z * speed, acceleration * delta)
 	velocity.y += GRAVITY * delta
-	if input_message.jumping:
+	if input_message.jumping and $FloorCheck.is_colliding():
 		velocity.y = jump_impulse
 	set_velocity(velocity)
 	move_and_slide()
@@ -60,6 +59,22 @@ func _physics_process(delta):
 	snapshot.player_angle = self.rotation.y
 	snapshot.head_angle = $Head.rotation.x
 	rpc('client_get_player_snapshot', snapshot.encode())
+
+func _get_network_player_input() -> PlayerInput.InputMessage:
+	var input_message: PlayerInput.InputMessage = last_player_input
+	
+	if player_input_queue.size() != 0:
+		# TODO: This is exploitable, client can send a lot of inputs for one frame, be careful.
+		input_message = player_input_queue.pop_front()
+		extrapolation_length = 0
+		last_player_input = input_message
+		player_inputs.append(input_message)
+	else:
+		if extrapolation_length >= EXTRAPOLATION_TIME:
+			input_message = PlayerInput.InputMessage.new()
+		extrapolation_length += 1
+	
+	return input_message
 
 @rpc("any_peer", "unreliable_ordered")
 func client_get_player_snapshot(packed_snapshot: PackedByteArray):
