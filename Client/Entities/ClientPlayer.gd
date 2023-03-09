@@ -21,9 +21,9 @@ func _physics_process(delta):
 	super(delta)
 	if not is_multiplayer_authority():
 		_puppet_generate_movement()
+		return
 	else:
 		_puppet_generate_movement()
-		#return
 	
 	var input_message = player_input.get_input_message()
 	input_message.tick = game_root.tick_clock

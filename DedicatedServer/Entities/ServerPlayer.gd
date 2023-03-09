@@ -15,6 +15,7 @@ func _physics_process(delta):
 
 @rpc("any_peer", "reliable")
 func server_gather_player_input(packed_input_message: PackedByteArray):
+	print('input from: ', multiplayer.get_remote_sender_id(), ' on ', self.name)
 	var input_message = PlayerInput.InputMessage.decode(packed_input_message)
 	if player_inputs.size() > 0:
 		if player_inputs[-1].tick == game_root.tick_clock:
