@@ -48,18 +48,10 @@ func _physics_process(delta):
 	velocity.x = lerp(velocity.x, direction.x * speed, acceleration * delta)
 	velocity.z = lerp(velocity.z, direction.z * speed, acceleration * delta)
 	velocity.y += GRAVITY * delta
-	if input_message.jumping and $FloorCheck.is_colliding():
+	if input_message.jumping and is_on_floor():
 		velocity.y = jump_impulse
 	set_velocity(velocity)
 	move_and_slide()
-	
-	if NetworkManager.is_host():
-		var snapshot = PlayerSnapshot.new()
-		snapshot.tick = game_root.tick_clock
-		snapshot.player_position = self.transform.origin
-		snapshot.player_angle = self.rotation.y
-		snapshot.head_angle = $Head.rotation.x
-		rpc('client_get_player_snapshot', snapshot.encode())
 
 func _get_network_player_input() -> PlayerInput.InputMessage:
 	var input_message: PlayerInput.InputMessage = last_player_input
@@ -76,10 +68,6 @@ func _get_network_player_input() -> PlayerInput.InputMessage:
 		extrapolation_length += 1
 	
 	return input_message
-
-@rpc("any_peer", "unreliable_ordered")
-func client_get_player_snapshot(packed_snapshot: PackedByteArray):
-	print('THIS SHOULD NOT BE EXECUTED !')
 
 func set_display_name(name):
 	$NameTag.text = name

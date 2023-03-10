@@ -36,6 +36,7 @@ script = ExtResource("4")
 mesh = SubResource("9")
 
 [node name="FloorCheck" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 target_position = Vector3(0, -0.2, 0)
 
 [node name="NameTag" type="Label3D" parent="."]

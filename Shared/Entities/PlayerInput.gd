@@ -48,6 +48,8 @@ func get_movement_direction():
 		direction += Vector3.LEFT
 	if Input.is_action_pressed("right"):
 		direction += Vector3.RIGHT
+	
+	direction = direction.normalized()
 		
 	return direction
 

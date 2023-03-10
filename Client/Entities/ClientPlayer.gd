@@ -5,6 +5,8 @@ extends Player
 var current_snapshot: PlayerSnapshot = null
 var target_snapshot: PlayerSnapshot = null
 
+var positions := {}
+
 func _ready():
 	if is_multiplayer_authority():
 		self.set_main()
@@ -18,7 +20,6 @@ func _process(delta):
 		_puppet_move()
 
 func _physics_process(delta):
-	super(delta)
 	if not is_multiplayer_authority():
 		_puppet_generate_movement()
 		return
@@ -32,6 +33,10 @@ func _physics_process(delta):
 	player_input_queue.append(input_message)
 	
 	rpc_id(NetworkManager.SERVER_ID, 'server_gather_player_input', input_message.encode())
+	
+	super(delta)
+	
+	positions[game_root.tick_clock] = transform.origin
 
 var last_puppet_move := 0.0
 
@@ -78,11 +83,24 @@ func _puppet_move():
 func server_gather_player_input(packed_input_message: PackedByteArray):
 	print('THIS SHOULD NOT BE EXECUTED !')
 
+const RECONCILIATION_THRESHOLD := 20
+var prediction_errors := 0
+
 @rpc("any_peer", "unreliable_ordered")
 func client_get_player_snapshot(packed_snapshot: PackedByteArray):
 	var snapshot := PlayerSnapshot.decode(packed_snapshot)
 	if is_multiplayer_authority():
-		print('simulation delta: ', self.transform.origin - snapshot.player_position)
+		if self.positions.has(snapshot.tick - game_root.tick_delay):
+			var delta_vec : Vector3 = self.positions[snapshot.tick - game_root.tick_delay] - snapshot.player_position
+			var delta = delta_vec.length_squared()
+			if delta > 0.1:
+				print('Prediction error on tick ', game_root.tick_clock, ': ', delta_vec)
+				prediction_errors += 1
+				if prediction_errors >= RECONCILIATION_THRESHOLD:
+					self.transform.origin = snapshot.player_position + (self.transform.origin - self.positions[snapshot.tick - game_root.tick_delay])
+					prediction_errors = 0
+			else:
+				prediction_errors = max(0, prediction_errors - 1)
 		return
 	snapshot_container.push_snapshot(snapshot)
 	
