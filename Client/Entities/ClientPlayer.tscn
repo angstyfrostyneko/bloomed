@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dn8hvbja1x67h"]
+[gd_scene load_steps=9 format=3 uid="uid://dn8hvbja1x67h"]
 
 [ext_resource type="PackedScene" uid="uid://gchitm42n36h" path="res://Shared/Entities/Player.tscn" id="1"]
 [ext_resource type="Script" path="res://Client/Entities/ClientPlayer.gd" id="2"]
 [ext_resource type="Script" path="res://Client/Prefabs/IngameMenu.gd" id="3"]
+[ext_resource type="Script" path="res://Client/Prefabs/DebugPanel.gd" id="4_mgj8i"]
 
 [sub_resource type="StandardMaterial3D" id="1"]
 albedo_color = Color(1, 0.054902, 0.054902, 1)
@@ -17,6 +18,8 @@ rings = 4
 [sub_resource type="CylinderShape3D" id="3"]
 resource_local_to_scene = true
 height = 2.25
+
+[sub_resource type="LabelSettings" id="LabelSettings_3ol0q"]
 
 [node name="ClientPlayer" instance=ExtResource("1")]
 script = ExtResource("2")
@@ -121,6 +124,30 @@ text = "Leave"
 [node name="CloseButton" type="Button" parent="HUD/Menu/VBoxContainer" index="2"]
 layout_mode = 2
 text = "Close Menu"
+
+[node name="DebugPanel" type="PanelContainer" parent="HUD" index="5"]
+modulate = Color(1, 1, 1, 0.501961)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -95.0
+offset_bottom = 56.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 4
+script = ExtResource("4_mgj8i")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/DebugPanel" index="0"]
+layout_mode = 2
+
+[node name="FPSLabel" type="Label" parent="HUD/DebugPanel/VBoxContainer" index="0"]
+layout_mode = 2
+text = "FPS: "
+label_settings = SubResource("LabelSettings_3ol0q")
+
+[node name="PingLabel" type="Label" parent="HUD/DebugPanel/VBoxContainer" index="1"]
+layout_mode = 2
+text = "Ping: "
 
 [connection signal="pressed" from="HUD/Menu/VBoxContainer/LeaveButton" to="HUD/Menu" method="_on_LeaveButton_pressed"]
 [connection signal="pressed" from="HUD/Menu/VBoxContainer/CloseButton" to="HUD/Menu" method="_on_CloseButton_pressed"]

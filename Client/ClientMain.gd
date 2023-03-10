@@ -1,4 +1,5 @@
 extends GameWorld
+class_name ClientMain
 
 const CLIENT_PLAYER_SCENE = preload('res://Client/Entities/ClientPlayer.tscn')
 
@@ -60,7 +61,3 @@ func server_receive_pong():
 func on_server_closed():
 	# warning-ignore:return_value_discarded
 	get_tree().change_scene_to_file('res://Client/Menu/ConnectMenu.tscn')
-
-
-
-	
