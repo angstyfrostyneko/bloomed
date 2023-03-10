@@ -20,7 +20,6 @@ func _ready():
 
 func _physics_process(delta):
 	super(delta)
-	print('Latency: ', latency)
 
 func first_sync():
 	rpc_id(NetworkManager.SERVER_ID, 'request_clock_sync')
@@ -46,7 +45,7 @@ func pong():
 	
 	latency = Time.get_ticks_msec() - t0
 	
-	tick_delay = int(ceil(latency / (2.0 * NetworkManager.TICK_DELTA_MS)))
+	tick_delay = int(latency / (2.0 * NetworkManager.TICK_DELTA_MS))
 	tick_clock = int(server_tick + latency / (2.0 * NetworkManager.TICK_DELTA_MS))
 
 @rpc("any_peer", "reliable")

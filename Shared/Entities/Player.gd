@@ -37,7 +37,9 @@ func _physics_process(delta):
 		return
 	
 	var input_message := _get_network_player_input()
-	
+	_apply_player_input(delta, input_message)
+
+func _apply_player_input(delta, input_message: PlayerInput.InputMessage):
 	self.rotate_y(input_message.camera_delta.x)
 	$Head.rotate_x(input_message.camera_delta.y)
 	$Head.rotation.x = clamp($Head.rotation.x, deg_to_rad(PlayerInput.MIN_CAMERA_ANGLE),

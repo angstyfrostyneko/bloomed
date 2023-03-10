@@ -65,7 +65,15 @@ class InputMessage extends TimestampedData:
 	var camera_delta : Vector2
 	var jumping : bool
 	
-	func encode():
+	func copy() -> InputMessage:
+		var result = InputMessage.new()
+		result.direction = direction
+		result.camera_delta = camera_delta
+		result.jumping = jumping
+		result.tick = tick
+		return result
+	
+	func encode() -> PackedByteArray:
 		var result = PackedByteArray()
 		result.resize(25)
 		result.encode_u32(0, tick)
@@ -77,7 +85,7 @@ class InputMessage extends TimestampedData:
 		result.encode_u8(24, jumping)
 		return result
 	
-	static func decode(data: PackedByteArray):
+	static func decode(data: PackedByteArray) -> InputMessage:
 		var result = InputMessage.new()
 		result.tick = data.decode_u32(0)
 		result.direction.x = data.decode_float(4)
