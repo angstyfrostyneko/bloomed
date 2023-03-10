@@ -17,8 +17,9 @@ func _process(delta):
 	super(delta)
 	if not is_multiplayer_authority():
 		_puppet_move()
-	else:
-		_puppet_move()
+		return
+	if reconciliation_interp:
+		_interp_move()
 
 func _physics_process(delta):
 	if not is_multiplayer_authority():
@@ -26,6 +27,8 @@ func _physics_process(delta):
 		return
 	#else:
 	#	_puppet_generate_movement()
+	
+	reconciliation_interp = false
 	
 	if reconciliation_target != null:
 		_reconciliate(delta)
@@ -91,15 +94,26 @@ func _puppet_move():
 		self.rotation.y = lerp_angle(current_snapshot.player_angle, target_snapshot.player_angle, progress)
 		$Head.rotation.x = lerp_angle(current_snapshot.head_angle, target_snapshot.head_angle, progress)
 
+func _interp_move():
+	var count_time = NetworkManager.TICK_DELTA
+	if last_puppet_move >= count_time:
+		return
+	var step = min(get_physics_process_delta_time(), NetworkManager.TICK_DELTA)
+	last_puppet_move = step
+	var progress = step / count_time
+	self.transform.origin = pre_reconciliation_pos.lerp(reconciliation_pos, progress)
+
 @rpc("any_peer", "reliable")
 func server_gather_player_input(packed_input_message: PackedByteArray):
 	print('THIS SHOULD NOT BE EXECUTED !')
 
-const RECONCILIATION_THRESHOLD := 10
-var prediction_errors := 0
 
 var reconciliation_target : PlayerSnapshot = null
 var rewind_amount : int = 0
+
+var reconciliation_interp := false
+var reconciliation_pos : Vector3
+var pre_reconciliation_pos : Vector3
 
 class PredictionRecord:
 	var position: Vector3
@@ -108,6 +122,7 @@ class PredictionRecord:
 
 func _reconciliate(delta):
 	print('Reconciliation to ', reconciliation_target.player_position, ' against ', self.prediction_records[reconciliation_target.tick].position)
+	self.pre_reconciliation_pos = self.transform.origin
 	self.transform.origin = reconciliation_target.player_position
 	self.rotation.y = reconciliation_target.player_angle
 	$Head.rotation.x = reconciliation_target.head_angle
@@ -119,7 +134,11 @@ func _reconciliate(delta):
 		var input = self.player_inputs[-rewind_amount].copy()
 		_apply_player_input(NetworkManager.TICK_DELTA, input)
 		rewind_amount -= 1
+	self.reconciliation_pos = self.transform.origin
+	self.transform.origin = pre_reconciliation_pos
 	reconciliation_target = null
+	reconciliation_interp = true
+	last_puppet_move = 0.0
 	
 
 @rpc("any_peer", "unreliable_ordered")
@@ -129,16 +148,12 @@ func client_get_player_snapshot(packed_snapshot: PackedByteArray):
 		if self.prediction_records.has(snapshot.tick):
 			var delta_vec : Vector3 = self.prediction_records[snapshot.tick].position - snapshot.player_position
 			var delta = delta_vec.length_squared()
-			if delta > self.velocity.length_squared() + 0.1:
-				print('Prediction error (', prediction_errors, ') on tick ', game_root.tick_clock, ': ', delta_vec)
-				prediction_errors += 1
-				if prediction_errors >= RECONCILIATION_THRESHOLD:
-					reconciliation_target = snapshot
-					rewind_amount = max(game_root.tick_clock - (snapshot.tick), 0)
-					print('REWINDING BY ', rewind_amount)
-					prediction_errors = 0
-			else:
-				prediction_errors = max(0, prediction_errors - 1)
+			print(delta_vec)
+			if delta > 0.01:
+				print('Prediction error on tick ', game_root.tick_clock, ': ', delta_vec)
+				reconciliation_target = snapshot
+				rewind_amount = max(game_root.tick_clock - (snapshot.tick), 0) + 1
+				print('REWINDING BY ', rewind_amount)
 		return
 	snapshot_container.push_snapshot(snapshot)
 	

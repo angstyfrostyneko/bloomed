@@ -39,7 +39,7 @@ func _physics_process(delta):
 		return
 	
 	var input_message := _get_network_player_input()
-	_apply_player_input(delta, input_message)
+	_apply_player_input(NetworkManager.TICK_DELTA, input_message)
 
 func _apply_player_input(delta, input_message: PlayerInput.InputMessage):
 	self.rotate_y(input_message.camera_delta.x)
