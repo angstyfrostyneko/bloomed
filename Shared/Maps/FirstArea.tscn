@@ -13,7 +13,7 @@
 albedo_color = Color(0.301961, 0.301961, 0.301961, 1)
 metallic_specular = 0.31
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_0gpik"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_xwnrb"]
 _surfaces = [{
 "aabb": AABB(0, 0, 0, 2, 1e-05, 2),
 "attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 64, 0, 0, 0, 64),
@@ -687,7 +687,7 @@ material = ExtResource("4")
 
 [node name="WaterRiver" parent="Environment" instance=ExtResource("7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, -2, -250)
-mesh = SubResource("ArrayMesh_0gpik")
+mesh = SubResource("ArrayMesh_xwnrb")
 resolution = 2.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

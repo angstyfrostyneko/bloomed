@@ -2,8 +2,10 @@ extends CharacterBody3D
 class_name Player
 
 const GRAVITY = -9.8
+const WALKING_SPEED := 1.5
+const RUNNING_SPEED := 3.0
 
-@export var speed: float = 1.5
+@export var speed: float = WALKING_SPEED
 @export var acceleration: float = 6.0
 @export var jump_impulse: float = 4.0
 
@@ -47,6 +49,11 @@ func _apply_player_input(delta, input_message: PlayerInput.InputMessage):
 	
 	var direction := transform.basis * input_message.direction
 	
+	if input_message.running:
+		speed = RUNNING_SPEED
+	else:
+		speed = WALKING_SPEED
+
 	velocity.x = lerp(velocity.x, direction.x * speed, acceleration * delta)
 	velocity.z = lerp(velocity.z, direction.z * speed, acceleration * delta)
 	velocity.y += GRAVITY * delta

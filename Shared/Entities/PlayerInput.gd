@@ -23,6 +23,7 @@ func get_input_message():
 	result.direction = get_movement_direction()
 	result.camera_delta = get_camera_rotation()
 	result.jumping = is_jumping()
+	result.running = is_running()
 	return result
 
 var camera_yaw_delta := 0.0
@@ -56,6 +57,9 @@ func get_movement_direction():
 func is_jumping():
 	return Input.is_action_just_pressed("jump")
 
+func is_running():
+	return Input.is_action_pressed("run")
+
 func _handle_camera_rotation(event):
 	self.camera_yaw_delta += deg_to_rad(-event.relative.x * camera_sensitivity)
 	self.camera_pitch_delta += deg_to_rad(-event.relative.y * camera_sensitivity)
@@ -64,12 +68,15 @@ class InputMessage extends TimestampedData:
 	var direction : Vector3
 	var camera_delta : Vector2
 	var jumping : bool
+	var running : bool
 	
 	func copy() -> InputMessage:
 		var result = InputMessage.new()
+		
 		result.direction = direction
 		result.camera_delta = camera_delta
 		result.jumping = jumping
+		result.running = running
 		result.tick = tick
 		return result
 	
@@ -82,7 +89,10 @@ class InputMessage extends TimestampedData:
 		result.encode_float(12, direction.z)
 		result.encode_float(16, camera_delta.x)
 		result.encode_float(20, camera_delta.y)
-		result.encode_u8(24, jumping)
+		var movement_flags = 0
+		movement_flags |= int(jumping) << 0
+		movement_flags |= int(running) << 1
+		result.encode_u8(24, movement_flags)
 		return result
 	
 	static func decode(data: PackedByteArray) -> InputMessage:
@@ -93,7 +103,9 @@ class InputMessage extends TimestampedData:
 		result.direction.z = data.decode_float(12)
 		result.camera_delta.x = data.decode_float(16)
 		result.camera_delta.y = data.decode_float(20)
-		result.jumping = data.decode_u8(24) as bool
+		var movement_flags = data.decode_u8(24)
+		result.jumping = (movement_flags >> 0) & 1
+		result.running = (movement_flags >> 1) & 1
 		return result
 
 
